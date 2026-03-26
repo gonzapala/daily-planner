@@ -1313,8 +1313,10 @@ let chatLoading = false;
 let fridgeMode = false;
 
 // ── API Keys ──
-function getChatApiKey() { return localStorage.getItem('gp_api_key') || ''; }
-function getYtApiKey()   { return localStorage.getItem('gp_yt_key')  || ''; }
+const __ANTHROPIC_KEY__ = '%%ANTHROPIC_API_KEY%%';
+const __YT_KEY__        = '%%YOUTUBE_API_KEY%%';
+function getChatApiKey() { return (__ANTHROPIC_KEY__ && !__ANTHROPIC_KEY__.startsWith('%%')) ? __ANTHROPIC_KEY__ : (localStorage.getItem('gp_api_key') || ''); }
+function getYtApiKey()   { return (__YT_KEY__ && !__YT_KEY__.startsWith('%%')) ? __YT_KEY__ : (localStorage.getItem('gp_yt_key')  || ''); }
 
 function saveApiKey() {
   const ak = document.getElementById('apiKeyInput').value.trim();
