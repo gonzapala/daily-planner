@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planner · Gonzalo</title>
+<meta name="theme-color" content="#0c0c0e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Planner">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Outfit', 'sans-serif'],
+        mono: ['Space Mono', 'monospace'],
+      },
+      colors: {
+        bg:      '#0c0c0e',
+        s1:      '#131316',
+        s2:      '#1a1a1f',
+        s3:      '#222228',
+        border:  '#2c2c36',
+        bord2:   '#3a3a48',
+        lime:    '#7a9e50',
+        avocado: '#7a9e50',
+        teal:    '#4cf0b8',
+        rose:    '#f25c7a',
+        amber:   '#f0b840',
+        blue:    '#60b0f8',
+        ink:     '#e2e2ea',
+        muted:   '#72728a',
+        muted2:  '#50505f',
+      },
+    }
+  }
+}
+</script>
+<style>
+  html { font-size: 18px; }
+  @media (min-width: 640px) { html { font-size: 16px; } }
+
+  body { background: #0c0c0e; color: #e2e2ea; font-family: 'Outfit', sans-serif; }
+
+  .meal-input {
+    width: 100%; background: #1a1a1f; border: 1px solid transparent;
+    border-radius: 8px; padding: 10px 12px; font-size: 16px; font-family: 'Outfit', sans-serif;
+    color: #e2e2ea; line-height: 1.5; resize: none; min-height: 60px;
+    transition: border-color 0.12s; cursor: pointer;
+  }
+  @media (min-width: 640px) {
+    .meal-input { font-size: 14px; min-height: 52px; padding: 8px 10px; }
+  }
+  .meal-input:hover, .meal-input:focus { border-color: #3a3a48; outline: none; background: #1e1e26; cursor: text; }
+  .meal-input::placeholder { color: #50505f; font-style: italic; }
+
+  .modal-input {
+    width: 100%; background: #1a1a1f; border: 1px solid #2c2c36;
+    border-radius: 8px; padding: 14px; color: #e2e2ea; font-size: 17px;
+    font-family: 'Outfit', sans-serif; resize: none;
+  }
+  @media (min-width: 640px) { .modal-input { font-size: 15px; padding: 12px; } }
+  .modal-input:focus { outline: none; border-color: #3a3a48; }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: #0c0c0e; }
+  ::-webkit-scrollbar-thumb { background: #3a3a48; border-radius: 3px; }
+  #dayGrid::-webkit-scrollbar { display: none; }
+  #dayGrid { scrollbar-width: none; }
+  .tab-btn { transition: all 0.15s; }
+  .shop-line { transition: opacity 0.12s; }
+  .habit-card { transition: all 0.15s; user-select: none; }
+  select, input[type="text"], input[type="date"] {
+    font-family: 'Outfit', sans-serif;
+    background: #1a1a1f;
+    color: #e2e2ea;
+  }
+  input[type="range"] { cursor: pointer; }
+  .chat-content strong { color: #e2e2ea; font-weight: 700; }
+  .chat-content em { color: #b0b8a8; font-style: italic; }
+  #chatMessages { scroll-behavior: smooth; }
+  #chatInput { font-family: 'Outfit', sans-serif; }
+  .suggest-btn { transition: all 0.15s; }
+
+  /* Mobile font boosts — only below 640px */
+  @media (max-width: 639px) {
+    .text-xs   { font-size: 0.78rem !important; }
+    .text-sm   { font-size: 0.95rem !important; }
+    .text-base { font-size: 1.1rem  !important; }
+    .text-lg   { font-size: 1.25rem !important; }
+    .text-xl   { font-size: 1.4rem  !important; }
+    .text-2xl  { font-size: 1.6rem  !important; }
+    .font-mono { letter-spacing: -0.3px; }
+
+    /* Streak numbers stay big */
+    .text-5xl  { font-size: 3.2rem !important; }
+    .text-6xl  { font-size: 3.5rem !important; }
+
+    /* Tab bar */
+    .tab-btn   { font-size: 1rem !important; padding: 14px 16px !important; }
+
+    /* Buttons */
+    .btn-mobile { font-size: 1rem !important; padding: 10px 18px !important; }
+
+    /* Habit cards */
+    #dailyHabits .text-sm  { font-size: 1rem !important; }
+    #dailyHabits .text-xs  { font-size: 0.85rem !important; }
+
+    /* Shopping items */
+    .shop-n { font-size: 1rem !important; }
+    .shop-q { font-size: 0.95rem !important; }
+
+    /* Meal labels */
+    .meal-tag-label { font-size: 0.8rem !important; }
+
+    /* Dot calendar tooltip — keep small */
+    .dot-tooltip { font-size: 0.75rem !important; }
+  }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ═══════════ TOPBAR ═══════════ -->
+<div class="sticky top-0 z-50 flex items-center justify-between flex-wrap gap-3 px-4 sm:px-6 py-4 border-b border-border bg-bg/95 backdrop-blur-sm">
+  <div class="flex items-baseline gap-3">
+    <span class="font-mono font-bold text-avocado text-base sm:text-lg">PLANNER /</span>
+    <span class="text-muted text-sm hidden sm:inline">Gonzalo · 91 kg · Hábitos atómicos · Sin harinas refinadas</span>
+  </div>
+  <div class="flex gap-2 flex-wrap">
+    <button onclick="clearAll()" class="btn-mobile text-sm font-semibold px-3 py-2 rounded-lg border border-border bg-s2 text-muted hover:text-ink hover:border-bord2">↺ Limpiar</button>
+    <button onclick="autoFill()" class="btn-mobile text-sm font-bold px-4 py-2 rounded-lg bg-avocado text-white hover:bg-[#8ab85c]">⚡ Autocompletar</button>
+  </div>
+</div>
+
+<!-- ═══════════ TABS ═══════════ -->
+<div class="flex gap-0 px-4 sm:px-6 border-b border-border overflow-x-auto">
+  <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap active-tab" data-tab="planner"   onclick="showTab('planner')">📅 Planner</button>
+  <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="compras"  onclick="showTab('compras')">🛒 Compras</button>
+  <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="batch"    onclick="showTab('batch')">🍳 Batch</button>
+  <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="habitos"  onclick="showTab('habitos')">🧠 Hábitos</button>
+  <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="racha"    onclick="showTab('racha')">🔥 Racha</button>
+  <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="objetivos" onclick="showTab('objetivos')">🎯 Objetivos</button>
+  <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="chat"      onclick="showTab('chat')">💬 Chat IA</button>
+</div>
+
+<div class="px-4 sm:px-6 py-5 max-w-[1400px] mx-auto">
+
+<!-- ═══════════ PLANNER ═══════════ -->
+<div id="pane-planner" class="pane">
+
+  <!-- Habit strip -->
+  <div id="dailyHabits" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 mb-5">
+    <!-- rendered by JS -->
+  </div>
+
+  <!-- Week bar -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
+    <span id="weekLabel" class="font-mono text-sm text-muted"></span>
+    <div class="flex gap-2 flex-wrap">
+      <span class="text-sm px-3 py-1 rounded-full border border-border bg-s2 text-muted">Comidas: <strong class="text-avocado" id="mealsDone">0</strong>/35</span>
+      <span class="text-sm px-3 py-1 rounded-full border border-border bg-s2 text-muted">Hábitos hoy: <strong class="text-teal" id="habitsDone">0</strong>/9</span>
+    </div>
+  </div>
+
+  <!-- Day grid -->
+  <div id="dayGrid" class="flex gap-3 overflow-x-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;"></div>
+
+</div>
+
+<!-- ═══════════ COMPRAS ═══════════ -->
+<div id="pane-compras" class="pane hidden">
+
+  <div class="flex items-end justify-between flex-wrap gap-3 mb-5">
+    <div>
+      <div class="font-mono text-xl text-avocado">Lista de Compras</div>
+      <div class="text-sm text-muted mt-1">Cantidades calculadas para el plan semanal · 1 persona</div>
+    </div>
+    <button onclick="uncheckShop()" class="text-sm font-semibold px-3 py-2 rounded-lg border border-border bg-s2 text-muted hover:text-ink">↺ Reiniciar</button>
+  </div>
+
+  <!-- Exact quantities -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+    <div class="bg-s1 border border-border rounded-xl p-4">
+      <div class="font-mono text-xs text-muted uppercase tracking-wider mb-3">📊 Cantidades exactas por semana</div>
+      <div id="exactQty" class="grid grid-cols-2 gap-2"></div>
+    </div>
+    <div class="bg-s1 border border-border rounded-xl p-4">
+      <div class="font-mono text-xs text-muted uppercase tracking-wider mb-3">🏪 Dónde comprar</div>
+      <div id="storeGuide" class="flex flex-col gap-2"></div>
+    </div>
+  </div>
+
+  <div id="shopGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+</div>
+
+<!-- ═══════════ BATCH ═══════════ -->
+<div id="pane-batch" class="pane hidden">
+  <div class="font-mono text-xl text-avocado mb-1">Batch Cooking Semanal</div>
+  <p class="text-base text-muted mb-5 leading-relaxed">
+    Principio: <strong class="text-ink">cocinás 1 vez, comés 2–3 días.</strong> El domingo (75 min) te salva toda la semana.
+  </p>
+
+  <div class="bg-s1 border border-[#4a6830] rounded-xl p-4 sm:p-5 mb-6">
+    <div class="font-mono text-sm text-teal mb-4">🗓️ Plan Domingo — 75 minutos, 4 preparaciones base</div>
+    <div id="batchGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+  </div>
+
+  <div class="font-mono text-xs text-muted uppercase tracking-wider mb-3">Cómo se reutiliza cada preparación</div>
+  <div id="reuseGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+</div>
+
+<!-- ═══════════ HÁBITOS ═══════════ -->
+<div id="pane-habitos" class="pane hidden">
+  <div class="font-mono text-xl text-avocado mb-1">Hábitos Atómicos · Alimentación</div>
+  <p class="text-base text-muted mb-6 leading-relaxed">Basado en tu historial de Enero–Febrero 2025. Pequeños cambios, impacto enorme.</p>
+
+  <div class="font-mono text-xs text-muted uppercase tracking-wider border-b border-border pb-2 mb-4">🟢 Hábitos para instalar (semana 1–4)</div>
+  <div id="habitsInstall" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8"></div>
+
+  <div class="font-mono text-xs text-muted uppercase tracking-wider border-b border-border pb-2 mb-4">⚠️ Patrones a romper</div>
+  <div id="habitBreak" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8"></div>
+
+  <div class="font-mono text-xs text-muted uppercase tracking-wider border-b border-border pb-2 mb-4">📈 Escalón 2</div>
+  <div id="habitsNext" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+</div>
+
+<!-- ═══════════ RACHA ═══════════ -->
+<div id="pane-racha" class="pane hidden">
+
+  <!-- Hero stats row -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+    <div class="bg-s1 border border-[#5a4018] rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+      <div class="text-5xl sm:text-6xl font-mono font-bold text-amber" id="streakCount">0</div>
+      <div class="text-sm text-muted mt-1">días seguidos 🔥</div>
+      <div class="text-xs text-muted2 mt-0.5" id="streakLabel">—</div>
+    </div>
+    <div class="bg-s1 border border-[#4a6830] rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+      <div class="text-5xl sm:text-6xl font-mono font-bold text-avocado" id="weekPct">0%</div>
+      <div class="text-sm text-muted mt-1">esta semana</div>
+      <div class="text-xs text-muted2 mt-0.5" id="weekPctLabel">—</div>
+    </div>
+    <div class="bg-s1 border border-border rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+      <div class="text-5xl sm:text-6xl font-mono font-bold text-teal" id="bestStreak">0</div>
+      <div class="text-sm text-muted mt-1">mejor racha</div>
+      <div class="text-xs text-muted2 mt-0.5">histórico</div>
+    </div>
+    <div class="bg-s1 border border-border rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+      <div class="text-5xl sm:text-6xl font-mono font-bold text-blue" id="totalDays">0</div>
+      <div class="text-sm text-muted mt-1">días registrados</div>
+      <div class="text-xs text-muted2 mt-0.5">desde el inicio</div>
+    </div>
+  </div>
+
+  <!-- Weekly % bars per habit -->
+  <div class="bg-s1 border border-border rounded-2xl p-4 sm:p-5 mb-5">
+    <div class="font-mono text-xs text-muted uppercase tracking-wider mb-4">% cumplimiento esta semana por hábito</div>
+    <div id="habitBars" class="flex flex-col gap-3"></div>
+  </div>
+
+  <!-- Last 30 days dot calendar -->
+  <div class="bg-s1 border border-border rounded-2xl p-4 sm:p-5">
+    <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+      <div class="font-mono text-xs text-muted uppercase tracking-wider">Últimos 30 días</div>
+      <div class="flex items-center gap-3 text-xs text-muted">
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-avocado inline-block"></span>9/9</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-teal inline-block"></span>6–8</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-amber inline-block"></span>1–5</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-s3 border border-border inline-block"></span>0</span>
+      </div>
+    </div>
+    <div id="dotCalendar" class="flex flex-wrap gap-2"></div>
+  </div>
+
+</div>
+
+<!-- ═══════════ OBJETIVOS ═══════════ -->
+<div id="pane-objetivos" class="pane hidden">
+
+  <div class="flex items-end justify-between flex-wrap gap-3 mb-5">
+    <div>
+      <div class="font-mono text-xl text-avocado">Objetivos</div>
+      <div class="text-sm text-muted mt-1">Guardados localmente · próximamente conectado a Notion</div>
+    </div>
+    <button onclick="openNewObj()" class="btn-mobile font-bold text-base px-4 py-2.5 rounded-xl bg-avocado text-white hover:bg-[#8ab85c]">+ Nuevo objetivo</button>
+  </div>
+
+  <!-- Categorías -->
+  <div class="flex gap-2 flex-wrap mb-5" id="objCatFilter">
+    <button onclick="filterObj('all')" data-cat="all"
+      class="obj-cat-btn font-semibold text-sm px-4 py-2 rounded-full border border-avocado text-avocado bg-transparent">
+      Todos
+    </button>
+    <button onclick="filterObj('salud')" data-cat="salud"
+      class="obj-cat-btn font-semibold text-sm px-4 py-2 rounded-full border border-border text-muted bg-s2">
+      💪 Salud
+    </button>
+    <button onclick="filterObj('alimentacion')" data-cat="alimentacion"
+      class="obj-cat-btn font-semibold text-sm px-4 py-2 rounded-full border border-border text-muted bg-s2">
+      🥗 Alimentación
+    </button>
+    <button onclick="filterObj('personal')" data-cat="personal"
+      class="obj-cat-btn font-semibold text-sm px-4 py-2 rounded-full border border-border text-muted bg-s2">
+      🧠 Personal
+    </button>
+    <button onclick="filterObj('proyecto')" data-cat="proyecto"
+      class="obj-cat-btn font-semibold text-sm px-4 py-2 rounded-full border border-border text-muted bg-s2">
+      💻 Proyecto
+    </button>
+  </div>
+
+  <!-- Progress overview -->
+  <div id="objStats" class="grid grid-cols-3 gap-3 mb-5"></div>
+
+  <!-- Objectives list -->
+  <div id="objList" class="flex flex-col gap-3"></div>
+
+  <!-- Empty state -->
+  <div id="objEmpty" class="hidden text-center py-16 text-muted">
+    <div class="text-5xl mb-3">🎯</div>
+    <div class="text-base">No hay objetivos todavía.</div>
+    <div class="text-sm mt-1">Tocá "+ Nuevo objetivo" para agregar uno.</div>
+  </div>
+
+</div>
+
+<!-- ═══════════ CHAT IA ═══════════ -->
+<div id="pane-chat" class="pane hidden flex flex-col" style="height: calc(100dvh - 120px);">
+
+  <!-- API Key setup (shown if no key stored) -->
+  <div id="chatSetup" class="hidden mb-4 bg-s1 border border-[#4a6830] rounded-2xl p-4">
+    <div class="font-mono text-sm text-avocado mb-1">🔑 Configuración</div>
+    <div class="flex flex-col gap-3">
+      <div>
+        <div class="text-sm text-muted mb-1.5">API Key de Anthropic *
+          <a href="https://console.anthropic.com" target="_blank" class="text-avocado underline ml-1">obtener gratis →</a>
+        </div>
+        <input id="apiKeyInput" type="password" placeholder="sk-ant-..."
+          class="w-full bg-s2 border border-border rounded-xl px-4 py-3 text-base text-ink font-sans focus:outline-none focus:border-bord2">
+      </div>
+      <div>
+        <div class="text-sm text-muted mb-1.5">API Key de YouTube
+          <span class="text-muted2 text-xs">(opcional, para buscar videos de recetas)</span>
+          <a href="https://console.cloud.google.com" target="_blank" class="text-avocado underline ml-1">obtener →</a>
+        </div>
+        <input id="ytKeyInput" type="password" placeholder="AIza..."
+          class="w-full bg-s2 border border-border rounded-xl px-4 py-3 text-base text-ink font-sans focus:outline-none focus:border-bord2">
+      </div>
+      <button onclick="saveApiKey()" class="font-bold text-base py-3 rounded-xl bg-avocado text-white hover:bg-[#8ab85c]">Guardar</button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div id="chatMessages" class="flex-1 overflow-y-auto flex flex-col gap-4 pb-4 pr-1"></div>
+
+  <!-- Suggested prompts (shown when empty) -->
+  <div id="chatSuggestions" class="flex flex-wrap gap-2 mb-3">
+    <div class="w-full text-xs text-muted mb-1 font-mono uppercase tracking-wider">Sugerencias</div>
+    <!-- Dynamic meal-time button injected by JS -->
+    <button id="btnMealTime" onclick="startMealFlow()"
+      class="suggest-btn w-full text-base px-4 py-3 rounded-2xl border-2 border-avocado bg-[#182518] text-avocado font-semibold hover:bg-[#1e3018] text-left">
+    </button>
+    <button onclick="sendSuggestion('Dame una receta de postre saludable sin harinas refinadas')"     class="suggest-btn text-sm px-3 py-2 rounded-full border border-border bg-s2 text-muted hover:border-avocado hover:text-avocado">🍮 Postre sin harinas</button>
+    <button onclick="sendSuggestion('¿Qué ejercicios puedo hacer en casa siendo sedentario?')"       class="suggest-btn text-sm px-3 py-2 rounded-full border border-border bg-s2 text-muted hover:border-avocado hover:text-avocado">🏠 Ejercicio en casa</button>
+    <button onclick="sendSuggestion('¿Cuántas calorías tiene mi almuerzo típico del plan?')"         class="suggest-btn text-sm px-3 py-2 rounded-full border border-border bg-s2 text-muted hover:border-avocado hover:text-avocado">🔥 Calorías del almuerzo</button>
+    <button onclick="sendSuggestion('¿Cuánta proteína necesito por día con mi peso actual de 91kg?')" class="suggest-btn text-sm px-3 py-2 rounded-full border border-border bg-s2 text-muted hover:border-avocado hover:text-avocado">💪 Proteína diaria</button>
+    <button onclick="sendSuggestion('Dame ideas de colaciones saludables para llevar al trabajo')"   class="suggest-btn text-sm px-3 py-2 rounded-full border border-border bg-s2 text-muted hover:border-avocado hover:text-avocado">🎒 Colaciones trabajo</button>
+    <button onclick="sendSuggestion('¿Qué puedo comer si no tengo nada preparado y tengo hambre?')" class="suggest-btn text-sm px-3 py-2 rounded-full border border-border bg-s2 text-muted hover:border-avocado hover:text-avocado">⚡ Comida express</button>
+    <button onclick="sendSuggestion('Dame una rutina de gym para principiantes 3 días por semana')"  class="suggest-btn text-sm px-3 py-2 rounded-full border border-border bg-s2 text-muted hover:border-avocado hover:text-avocado">🏋️ Rutina gym</button>
+  </div>
+
+  <!-- Input bar -->
+  <div class="flex gap-2 items-end">
+    <textarea id="chatInput" rows="1" placeholder="Preguntá sobre alimentación, recetas, ejercicio..."
+      class="flex-1 bg-s2 border border-border rounded-2xl px-4 py-3 text-base text-ink font-sans focus:outline-none focus:border-bord2 resize-none leading-snug"
+      style="max-height:120px; overflow-y:auto;"
+      onkeydown="chatKeydown(event)"
+      oninput="autoResize(this)"></textarea>
+    <button id="chatSendBtn" onclick="sendChat()"
+      class="flex-shrink-0 w-12 h-12 rounded-2xl bg-avocado text-white flex items-center justify-center text-xl hover:bg-[#8ab85c] transition-colors disabled:opacity-40"
+      style="align-self:flex-end">
+      <span id="chatSendIcon">↑</span>
+    </button>
+  </div>
+
+  <!-- Change key link -->
+  <div class="text-center mt-2">
+    <button onclick="showKeySetup()" class="text-xs text-muted2 hover:text-muted">cambiar API key</button>
+  </div>
+
+</div>
+
+</div><!-- /content -->
+
+<!-- MODAL OBJETIVO -->
+<div id="objOverlay" class="hidden fixed inset-0 bg-black/75 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-5" onclick="closeObjOverlay(event)">
+  <div class="bg-s1 border border-bord2 rounded-t-2xl sm:rounded-2xl p-5 sm:p-6 w-full sm:max-w-lg max-h-[90vh] overflow-y-auto">
+    <div id="objModalTitle" class="font-mono text-base text-avocado mb-4">Nuevo objetivo</div>
+
+    <div class="flex flex-col gap-3">
+      <div>
+        <div class="text-sm text-muted mb-1.5">Título *</div>
+        <input id="objTitle" type="text" placeholder="Ej: Bajar a 85 kg"
+          class="w-full bg-s2 border border-border rounded-xl px-4 py-3 text-base text-ink font-sans focus:outline-none focus:border-bord2">
+      </div>
+      <div>
+        <div class="text-sm text-muted mb-1.5">Descripción (opcional)</div>
+        <textarea id="objDesc" rows="2" placeholder="Detalle o motivación..."
+          class="w-full bg-s2 border border-border rounded-xl px-4 py-3 text-base text-ink font-sans focus:outline-none focus:border-bord2 resize-none"></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <div class="text-sm text-muted mb-1.5">Categoría</div>
+          <select id="objCat" class="w-full bg-s2 border border-border rounded-xl px-4 py-3 text-base text-ink font-sans focus:outline-none">
+            <option value="salud">💪 Salud</option>
+            <option value="alimentacion">🥗 Alimentación</option>
+            <option value="personal">🧠 Personal</option>
+            <option value="proyecto">💻 Proyecto</option>
+          </select>
+        </div>
+        <div>
+          <div class="text-sm text-muted mb-1.5">Fecha límite</div>
+          <input id="objDate" type="date"
+            class="w-full bg-s2 border border-border rounded-xl px-4 py-3 text-base text-ink font-sans focus:outline-none">
+        </div>
+      </div>
+      <div>
+        <div class="text-sm text-muted mb-1.5">Progreso: <span id="objProgressLabel" class="text-avocado font-bold">0%</span></div>
+        <input id="objProgress" type="range" min="0" max="100" value="0"
+          oninput="document.getElementById('objProgressLabel').textContent=this.value+'%'"
+          class="w-full accent-[#7a9e50]">
+      </div>
+    </div>
+
+    <div class="flex gap-2 mt-5">
+      <button onclick="saveObj()" class="flex-1 font-bold text-base py-3 rounded-xl bg-avocado text-white hover:bg-[#8ab85c]">Guardar</button>
+      <button onclick="document.getElementById('objOverlay').classList.add('hidden')" class="font-semibold text-base px-5 py-3 rounded-xl border border-border bg-s2 text-muted">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODAL ═══════════ -->
+<div id="overlay" class="hidden fixed inset-0 bg-black/75 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-5" onclick="closeOverlay(event)">
+  <div class="bg-s1 border border-bord2 rounded-t-2xl sm:rounded-2xl p-5 sm:p-6 w-full sm:max-w-lg max-h-[88vh] overflow-y-auto">
+    <div id="mHead" class="font-mono text-base text-avocado mb-1"></div>
+    <div id="mSub" class="text-sm text-muted mb-4">✅ = sin harinas refinadas</div>
+    <div id="mBody"></div>
+    <textarea id="mInput" class="modal-input mt-3" rows="2" placeholder="Escribí tu comida..."></textarea>
+    <div class="flex gap-2 mt-4">
+      <button onclick="applyModal()" class="flex-1 font-bold text-base py-3 rounded-xl bg-avocado text-white hover:bg-[#8ab85c]">Aplicar</button>
+      <button onclick="document.getElementById('overlay').classList.add('hidden')" class="font-semibold text-base px-5 py-3 rounded-xl border border-border bg-s2 text-muted hover:text-ink">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════ DATA ════════════════
+
+const DAYS  = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+const MEALS = ['desayuno','almuerzo','colacion','merienda','cena'];
+const ML    = {desayuno:'Desayuno', almuerzo:'Almuerzo', colacion:'Colación', merienda:'Merienda', cena:'Cena'};
+
+const MEAL_COLOR = {
+  desayuno: 'text-amber',
+  almuerzo: 'text-avocado',
+  colacion: 'text-teal',
+  merienda: 'text-[#b890f8]',
+  cena:     'text-rose',
+};
+
+const BATCH_PAIRS = {
+  '0_almuerzo':'pollo','1_almuerzo':'pollo','1_cena':'pollo',
+  '2_almuerzo':'arroz','3_almuerzo':'hamblen','4_almuerzo':'hamblen',
+};
+
+const OPTS = {
+  desayuno: [
+    {t:'☕ Café + tostada integral queso y miel + fruta', nf:true},
+    {t:'☕ Café + tortilla de avena con crema de maní y banana', nf:true},
+    {t:'🥛 Yogurt desc. + cereales + granola + fruta + frutos secos', nf:true},
+    {t:'🥑 Café + galleta arroz con palta, huevo y semillas', nf:true},
+    {t:'🧋 Licuado frutas + galleta arroz con queso', nf:true},
+    {t:'☕ Matecocido con leche + tostada integral + fruta', nf:false},
+  ],
+  almuerzo: [
+    {t:'🍗 Milanesa de pollo al horno + ensalada mixta + arroz integral', nf:true},
+    {t:'🍗 Arrollado de pollo con acelga + ensalada zanahoria y remolacha', nf:true},
+    {t:'🍚 Pastel de arroz relleno de pollo gratinado + ensalada', nf:true},
+    {t:'🥗 Ensalada verano: pollo + tomate, choclo, remolacha, zanahoria, palta, huevo', nf:true},
+    {t:'🍔 Hamburguesas de lentejas + ensalada lechuga y tomate', nf:true},
+    {t:'🍛 Risotto de pollo y vegetales con arroz integral', nf:true},
+    {t:'🐟 Atún + arroz integral + tomate + huevo', nf:true},
+    {t:'🥣 Guiso de lentejas con verduras y pollo', nf:true},
+    {t:'🥧 Tarta integral de pollo y verdura + ensalada', nf:false},
+    {t:'🍖 Pan de carne con arroz primavera + ensalada', nf:true},
+  ],
+  colacion: [
+    {t:'🍎 1 fruta (manzana / durazno / ciruela)', nf:true},
+    {t:'🥜 Puñado frutos secos (nueces + almendras)', nf:true},
+    {t:'🫙 Galleta de arroz con queso cremoso', nf:true},
+    {t:'🍇 Uvas + barrita de cereales Íntegra', nf:true},
+    {t:'🥛 ½ vaso yogurt descremado', nf:true},
+    {t:'🥚 1 huevo hervido', nf:true},
+  ],
+  merienda: [
+    {t:'🍵 Té + galleta arroz con queso, semillas y fruta', nf:true},
+    {t:'🥣 Té rojo + tortilla de avena con crema de maní + fruta', nf:true},
+    {t:'🧋 Licuado banana y frutilla + galleta arroz con queso', nf:true},
+    {t:'🍦 Yogurt desc. + granola + frutos secos + banana', nf:true},
+    {t:'🥑 Galleta arroz con palta y huevo revuelto', nf:true},
+    {t:'☕ Café + fruta + frutos secos', nf:true},
+  ],
+  cena: [
+    {t:'🍗 Bife de pollo + ensalada mixta + 1 huevo', nf:true},
+    {t:'🥚 Omelette de 2 huevos con queso y tomate', nf:true},
+    {t:'🍗 Bife de pollo + arroz integral + tomate + zanahoria', nf:true},
+    {t:'🐟 Atún + arroz integral + tomate + verduras', nf:true},
+    {t:'🍔 Hamburguesas de lentejas + ensalada lechuga y tomate', nf:true},
+    {t:'🧆 Albóndigas de pollo y espinaca + ensalada', nf:true},
+    {t:'🥗 Ensalada verano con atún o pollo desmenuzado', nf:true},
+    {t:'🌮 Wrap integral pollo + verduras salteadas', nf:false},
+  ],
+};
+
+const TEMPLATE = {
+  0:{ desayuno:'☕ Café + tostada integral con queso, miel y fruta + granola', almuerzo:'🍗 Arrollado de pollo con acelga + ensalada zanahoria y remolacha (preparado domingo)', colacion:'🍎 1 manzana', merienda:'🍵 Té + galleta arroz con queso y semillas', cena:'🍗 Bife de pollo + arroz integral + tomate + zanahoria' },
+  1:{ desayuno:'☕ Café + tortilla de avena con crema de maní, banana y granola', almuerzo:'🍗 Arrollado de pollo (sobrante) + ensalada lechuga, tomate y huevo', colacion:'🍎 1 durazno o ciruela', merienda:'🥣 Té rojo + tortilla de avena con crema de maní y frutos secos', cena:'🍗 Bife de pollo + ensalada mixta + 1 huevo' },
+  2:{ desayuno:'🥑 Café + galleta arroz con palta, huevo y semillas', almuerzo:'🍚 Pastel de arroz con pollo gratinado + ensalada (preparado domingo)', colacion:'🥜 Puñado de nueces y almendras', merienda:'🍦 Yogurt desc. + granola + frutos secos + banana', cena:'🥚 Omelette de 2 huevos con queso y tomate' },
+  3:{ desayuno:'🥛 Yogurt desc. + cereales + granola + fruta + frutos secos', almuerzo:'🍔 Hamburguesas de lentejas + ensalada lechuga, tomate y zanahoria (preparado domingo)', colacion:'🍇 Uvas + barrita de cereales', merienda:'🧋 Licuado banana y frutilla + galleta arroz con queso', cena:'🐟 Atún + arroz integral + tomate + verduras' },
+  4:{ desayuno:'☕ Café + tostada integral con queso, miel y fruta', almuerzo:'🍔 Hamburguesas de lentejas (sobrante) + ensalada rúcula y tomate', colacion:'🥛 ½ vaso yogurt descremado + frutos secos', merienda:'🥑 Galleta arroz con palta y huevo revuelto', cena:'🍗 Bife de pollo + ensalada mixta + 1 huevo' },
+  5:{ desayuno:'🧋 Licuado de frutas + galleta arroz con queso y semillas', almuerzo:'🍛 Risotto de pollo y vegetales con arroz integral', colacion:'🍎 Fruta a elección', merienda:'☕ Café o té + fruta + frutos secos', cena:'🆓 Comida libre (con moderación)' },
+  6:{ desayuno:'☕ Café + tostada integral con queso, miel y fruta', almuerzo:'🥩 Patamuslo pollo al horno + ensalada tomate, garbanzos y queso', colacion:'🍎 1 fruta', merienda:'🍦 Yogurt desc. + granola + fruta', cena:'🥗 Ensalada verano: atún / pollo + tomate, choclo, zanahoria, palta, huevo' },
+};
+
+const EXACT_QTY = [
+  {e:'🥚', name:'Huevos',            n:'9–11',  unit:'unidades'},
+  {e:'🍗', name:'Bifes de pollo',     n:'5–6',   unit:'unidades ~120 g'},
+  {e:'🍗', name:'Pechuga (arrollado)',n:'1',     unit:'pechuga grande'},
+  {e:'🐟', name:'Atún (latas)',       n:'3',     unit:'latas 170 g'},
+  {e:'🍅', name:'Tomates',            n:'7–8',   unit:'medianos'},
+  {e:'🥬', name:'Lechuga + rúcula',   n:'1+1',   unit:'unid. + bolsa'},
+  {e:'🥕', name:'Zanahorias',         n:'6–7',   unit:'unidades'},
+  {e:'🥑', name:'Paltas',             n:'3–4',   unit:'unidades'},
+  {e:'🍌', name:'Bananas',            n:'5–6',   unit:'unidades'},
+  {e:'🍎', name:'Manzanas verdes',    n:'5–6',   unit:'unidades'},
+  {e:'🍋', name:'Limones',            n:'3',     unit:'unidades'},
+  {e:'🧅', name:'Cebollas',           n:'3',     unit:'unidades'},
+];
+
+const STORE_GUIDE = [
+  {icon:'🥩', place:'Carnicería',    items:'Pechuga entera, bifes de pollo, patamuslos, carne picada'},
+  {icon:'🥬', place:'Verdulería',    items:'Tomates, lechuga, rúcula, zanahoria, remolacha, palta, acelga, frutas'},
+  {icon:'🛒', place:'Supermercado', items:'Huevos, lácteos, arroz integral, lentejas, avena, galletas arroz, atún'},
+];
+
+const SHOPPING = {
+  '🥩 Carnes y Proteínas': [
+    {n:'Pechuga de pollo entera (arrollado)', q:'1 pechuga ~400 g'},
+    {n:'Bifes de pechuga / suprema de pollo', q:'600 g (~6 bifes)'},
+    {n:'Patamuslos de pollo (domingo)',        q:'2–3 unidades'},
+    {n:'Carne picada especial (opcional)',     q:'300–400 g', opt:true},
+    {n:'Atún al natural (latas)',              q:'3 × 170 g'},
+    {n:'Huevos',                               q:'12 unidades'},
+    {n:'Jamón natural fetas (colación opt.)', q:'100 g', opt:true},
+  ],
+  '🥬 Verdulería': [
+    {n:'Tomates / cherry',                     q:'7–8 unid. o 500 g cherry'},
+    {n:'Lechuga mantecosa',                    q:'1 unidad grande'},
+    {n:'Rúcula',                               q:'1 bolsa 100 g'},
+    {n:'Zanahoria',                            q:'6–7 unidades'},
+    {n:'Remolacha',                            q:'3–4 unidades'},
+    {n:'Acelga (para arrollado)',              q:'1 atado'},
+    {n:'Palta',                                q:'3–4 unidades'},
+    {n:'Choclo (ensalada verano)',             q:'1 lata o 2 mazorcas'},
+    {n:'Cebolla morada',                       q:'2 unidades'},
+    {n:'Pimiento rojo / verde',               q:'2 unidades'},
+    {n:'Champiñones (risotto)',               q:'200 g'},
+    {n:'Ajo',                                  q:'1 cabeza'},
+    {n:'Limón',                                q:'3 unidades'},
+    {n:'Manzana verde',                        q:'5–6 unidades'},
+    {n:'Banana',                               q:'6 unidades'},
+    {n:'Fruta de estación (durazno, uvas…)', q:'~500 g'},
+  ],
+  '🥛 Lácteos': [
+    {n:'Leche descremada',                     q:'1 litro'},
+    {n:'Yogurt descremado (potes)',           q:'6–7 potes'},
+    {n:'Queso port salut light',              q:'200 g'},
+    {n:'Queso untable descremado',            q:'1 pote 200 g'},
+    {n:'Queso rallado',                        q:'100 g'},
+  ],
+  '🌾 Almacén': [
+    {n:'Arroz integral',                       q:'500 g'},
+    {n:'Lentejas (latas)',                     q:'2 latas'},
+    {n:'Garbanzos (lata)',                     q:'1 lata'},
+    {n:'Avena instantánea',                   q:'500 g'},
+    {n:'Galletas de arroz',                   q:'2 paquetes'},
+    {n:'Pan lactal integral (Bimbo/Fargo)',   q:'1 paquete'},
+    {n:'Granola sin azúcar',                  q:'250 g'},
+    {n:'Cereales fibra (All-Bran / Fitness)', q:'1 caja'},
+    {n:'Crema de maní sin azúcar',            q:'1 frasco'},
+    {n:'Mermelada sin azúcar (Beepure)',      q:'1 frasco'},
+  ],
+  '🧴 Condimentos': [
+    {n:'Aceite de oliva',                      q:'c/n semana'},
+    {n:'Mostaza',                              q:'c/n'},
+    {n:'Miel',                                 q:'c/n'},
+    {n:'Semillas (chía + sésamo + girasol)',  q:'1 mix 200 g'},
+    {n:'Frutos secos (nueces + almendras)',   q:'200 g'},
+    {n:'Caldo de verdura/pollo en cubitos',   q:'1 caja'},
+    {n:'Rocío vegetal',                        q:'1 aerosol'},
+    {n:'Sal, pimienta, ajo polvo, orégano',   q:'revisar stock'},
+  ],
+};
+
+const BATCH_SUNDAY = [
+  { title:'🍗 Arrollado de pollo con acelga', days:'Lun almuerzo + Mar almuerzo', time:'40 min',
+    steps:['Abrí la pechuga en libro, untá con mostaza y ajo','Rellenala con acelga blanqueada + huevo duro + queso rallado','Enrollá y atá con hilo o envolvé en aluminio','Horno 180°C × 35 min, dejá enfriar y cortá en rodajas','Guardá en heladera en contenedor cerrado'] },
+  { title:'🍚 Pastel de arroz con pollo', days:'Mié almuerzo', time:'30 min',
+    steps:['Cocinar 1 taza de arroz integral (extra para guarnición)','Rehogar cebolla + zanahoria + pollo picado con especias','Armar: capa arroz / pollo / arroz en fuente','Gratinar con queso rallado 15 min a 200°C','Dura 3–4 días en heladera'] },
+  { title:'🍔 Hamburguesas de lentejas', days:'Jue almuerzo + Vie almuerzo', time:'20 min',
+    steps:['Escurrí 2 latas de lentejas y pisalas con tenedor','Mezclá con 2–3 zanahorias ralladas, 2 huevos, 3 cdas avena, ajo, sal','Formá 6–8 hamburguesas','Cocinás 4 ahora, las otras 4 van al freezer','Vuelta y vuelta en sartén ~4 min c/lado'] },
+  { title:'🥕 Verduras y bases lavadas', days:'Toda la semana', time:'15 min',
+    steps:['Rallá 4 zanahorias → tupper en heladera','Lavá y secá rúcula y lechuga → bolsa con papel','Herví 3 huevos duros → heladera listos','Dejá paltas verdes a temperatura ambiente','Arroz integral extra: dura 4–5 días en tupper cerrado'] },
+];
+
+const REUSE = [
+  {prep:'Arrollado de pollo', color:'border-[#4a6830]',
+   uses:['Lunes almuerzo: rodajas con ensalada de zanahoria y remolacha','Martes almuerzo: rodajas frías con lechuga, tomate y huevo duro']},
+  {prep:'Pastel de arroz', color:'border-[#3a4a5a]',
+   uses:['Miércoles almuerzo: porción caliente con ensalada','El arroz extra sirve de guarnición lunes y jueves']},
+  {prep:'Hamburguesas de lentejas', color:'border-[#5a4a28]',
+   uses:['Jueves almuerzo: 2 hamburguesas + ensalada grande','Viernes almuerzo: 2 hamburguesas del freezer','Cena express cualquier día si llegás tarde']},
+  {prep:'Arroz integral cocido', color:'border-[#2a4a4a]',
+   uses:['Lunes cena: guarnición con bife de pollo','Jueves cena: con atún y tomate','Dura 5 días en heladera en tupper cerrado']},
+];
+
+const HABITS_INSTALL = [
+  {icon:'🛒', title:'Comprá el sábado o domingo', type:'green', body:'Con el planner hecho llegás al super con la lista exacta. Sin lista no hay plan. Sin compras no hay comida. Siempre el mismo día para que sea automático.', tag:'Hábito de entorno'},
+  {icon:'🍳', title:'Sunday Prep: 75 minutos', type:'green', body:'Arrollado + pastel de arroz + hamburguesas + verduras lavadas. Hecho el domingo, tenés almuerzo de lunes a viernes resuelto. El lunes no tenés que pensar nada.', tag:'Hábito de preparación'},
+  {icon:'🥗', title:'½ plato de verdura siempre', type:'green', body:'En almuerzo y cena llenás la mitad del plato con ensalada o verdura cocida antes de poner proteína e hidrato. Reducís calorías sin pasarla mal.', tag:'Hábito de porción'},
+  {icon:'💧', title:'Botella en el escritorio', type:'blue', body:'Poné la botella de 1L visible cuando arrancás a trabajar. Cuando la terminás, la llenás. Solo con esto llegás a los 2L sin darte cuenta.', tag:'Hábito de visibilidad'},
+  {icon:'🌙', title:'Colación pre-cena preparada', type:'amber', body:'Cuando llegás con hambre, comés cualquier cosa. Solución: tener algo listo para las 19–20 hs (galleta + queso, fruta + frutos secos) antes de que el hambre mande.', tag:'Hábito de anticipación'},
+];
+
+const HABITS_BREAK = [
+  {icon:'⚠️', title:'"No hay nada en casa"', type:'rose', body:'Patrón más repetido en tu registro. Solución: heladera siempre con huevos, queso, alguna verdura y una proteína. Con eso siempre armás algo.', tag:'Trampa #1'},
+  {icon:'⚠️', title:'Dulces cuando hay ansiedad', type:'rose', body:'Alfajores, galletas, facturas — muy frecuente en tus semanas malas. Reemplazalo con: fruta + frutos secos, yogurt + granola, galleta arroz con queso o crema de maní.', tag:'Trampa #2'},
+  {icon:'⚠️', title:'Saltarse el almuerzo', type:'rose', body:'Sin almuerzo planificado terminás comiendo cualquier cosa o demasiado por la noche. El batch cooking del domingo lo resuelve.', tag:'Trampa #3'},
+];
+
+const HABITS_NEXT = [
+  {icon:'🏋️', title:'Reintroducir cross 3x/semana', type:'blue', body:'Tu meta de Jan–Feb 2025. Cuando los hábitos de alimentación sean automáticos (2–3 semanas), sumá el entrenamiento. No todo al mismo tiempo.', tag:'Escalón 2'},
+  {icon:'📊', title:'Registrar lo que comés (2 semanas)', type:'amber', body:'Como hacías en tu journal. Solo 14 días para identificar patrones. Te ayuda a ver dónde te salís del plan realmente.', tag:'Escalón 2'},
+  {icon:'🎯', title:'Meta gradual: 500 g/semana', type:'green', body:'De 91 kg a ~85 kg son 6 kg. A 500 g/semana son 12 semanas. Sin dieta estricta, solo con el plan y movimiento progresivo.', tag:'Escalón 2'},
+];
+
+const HABIT_DAILY = [
+  {label:'💧 Tomé 2L de agua',            desc:'8 vasos a lo largo del día'},
+  {label:'🚶 15 min de movimiento',       desc:'Caminata, escaleras, lo que sea'},
+  {label:'🥗 Verdura en almuerzo y cena', desc:'Al menos ½ plato c/comida'},
+  {label:'🚫 Sin harinas refinadas',      desc:'Pan blanco, facturas, galletitas'},
+  {label:'🌙 Cena antes de las 22 hs',   desc:'Evitá comer muy tarde'},
+  {label:'📖 Leer 3 páginas',             desc:'Antes de dormir o en el descanso'},
+  {label:'🧴 Skincare',                   desc:'Rutina mañana y/o noche'},
+  {label:'🚿 Bañarse',                    desc:'Higiene diaria'},
+  {label:'🛌 Acostarse a las 23 hs',      desc:'Descanso y recuperación'},
+];
+
+// ════════════════ STATE ════════════════
+let plan={}, shopDone={}, habits={};
+let currentEdit={d:null,m:null,el:null};
+
+function load(){
+  try{
+    plan    =JSON.parse(localStorage.getItem('gp_plan')   ||'{}');
+    shopDone=JSON.parse(localStorage.getItem('gp_shop')   ||'{}');
+    habits  =JSON.parse(localStorage.getItem('gp_habits') ||'{}');
+  }catch(e){}
+}
+function save(){
+  localStorage.setItem('gp_plan',   JSON.stringify(plan));
+  localStorage.setItem('gp_shop',   JSON.stringify(shopDone));
+  localStorage.setItem('gp_habits', JSON.stringify(habits));
+}
+
+// ════════════════ PLANNER ════════════════
+function renderPlanner(){
+  // habits strip
+  document.getElementById('dailyHabits').innerHTML = HABIT_DAILY.map((h,i)=>{
+    const key='today_'+new Date().toDateString()+'_'+i;
+    const done=!!habits[key];
+    return `<div class="habit-card flex items-start gap-3 p-3 rounded-xl border cursor-pointer select-none
+      ${done?'border-[#4a7030] bg-[#142010]':'border-border bg-s1'}" id="h${i}" onclick="toggleHabit(${i})">
+      <div class="w-5 h-5 flex-shrink-0 mt-0.5 rounded-md border flex items-center justify-center
+        ${done?'bg-avocado border-avocado':'border-bord2'}">
+        ${done?'<span style="font-size:11px;color:#fff;font-weight:700">✓</span>':''}
+      </div>
+      <div>
+        <div class="text-sm sm:text-base font-semibold text-ink leading-tight">${h.label}</div>
+        <div class="text-xs sm:text-sm text-muted mt-0.5">${h.desc}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // day grid
+  const grid=document.getElementById('dayGrid');
+  grid.innerHTML='';
+  let done=0;
+  const todayIdx=(new Date().getDay()+6)%7;
+
+  DAYS.forEach((day,di)=>{
+    if(!plan[di]) plan[di]={};
+    const isWE=di>=5, isToday=di===todayIdx;
+    const hasBatch=MEALS.some(m=>BATCH_PAIRS[di+'_'+m]);
+    const col=document.createElement('div');
+    col.className=`bg-s1 rounded-xl border flex-shrink-0 overflow-hidden
+      ${isWE?'border-[#2a2a3a]':isToday?'border-[#4a7030]':'border-border'}`;
+    col.style.cssText = 'width: 260px; scroll-snap-align: start;';
+
+    col.innerHTML=`
+      <div class="flex items-center justify-between px-3 py-3 border-b border-border">
+        <span class="font-mono font-bold text-base sm:text-sm uppercase tracking-wide ${isWE?'text-teal':'text-avocado'}">${day}</span>
+        <div class="flex gap-1.5">
+          ${isToday?`<span class="text-sm sm:text-xs px-2 py-0.5 rounded-full border border-[#4a7030] text-teal bg-s2">hoy</span>`:''}
+          ${hasBatch?`<span class="text-sm sm:text-xs px-2 py-0.5 rounded-full bg-[#182518] border border-[#4a6830] text-teal">🔄</span>`:''}
+        </div>
+      </div>
+      <div class="flex flex-col gap-2.5 p-3 sm:p-2.5">
+        ${MEALS.map(m=>{
+          const val=plan[di][m]||'';
+          if(val) done++;
+          const isBatch=BATCH_PAIRS[di+'_'+m];
+          return `<div>
+            <div class="flex items-center gap-1.5 mb-1.5">
+              <span class="meal-tag-label text-xs font-bold uppercase tracking-wide ${MEAL_COLOR[m]}">${ML[m]}</span>
+              ${isBatch?`<span class="w-2 h-2 rounded-full bg-teal" title="Batch cooking"></span>`:''}
+            </div>
+            <textarea class="meal-input"
+              rows="2"
+              placeholder="+ elegir..."
+              data-d="${di}" data-m="${m}"
+              onfocus="openModal(${di},'${m}',this)"
+              onchange="saveMeal(${di},'${m}',this.value)"
+            >${val}</textarea>
+          </div>`;
+        }).join('')}
+      </div>`;
+    grid.appendChild(col);
+  });
+
+  document.getElementById('mealsDone').textContent=done;
+  updateWeekLabel();
+  updateHabitCount();
+}
+
+function saveMeal(d,m,v){
+  if(!plan[d]) plan[d]={};
+  plan[d][m]=v; save();
+  let done=0;
+  DAYS.forEach((_,i)=>MEALS.forEach(mm=>{if(plan[i]?.[mm]) done++;}));
+  document.getElementById('mealsDone').textContent=done;
+}
+
+function updateWeekLabel(){
+  const today=new Date(), day=today.getDay();
+  const mon=new Date(today); mon.setDate(today.getDate()-(day===0?6:day-1));
+  const sun=new Date(mon);   sun.setDate(mon.getDate()+6);
+  const f=d=>d.toLocaleDateString('es-AR',{day:'numeric',month:'short'});
+  document.getElementById('weekLabel').textContent=`Semana ${f(mon)} – ${f(sun)}`;
+}
+
+function updateHabitCount(){
+  let c=0;
+  for(let i=0;i<9;i++){if(habits['today_'+new Date().toDateString()+'_'+i]) c++;}
+  document.getElementById('habitsDone').textContent=c;
+}
+
+// ════════════════ MODAL ════════════════
+function openModal(d,m,el){
+  currentEdit={d,m,el};
+  document.getElementById('mHead').textContent=`${DAYS[d]} · ${ML[m]}`;
+  document.getElementById('mInput').value=plan[d]?.[m]||'';
+  const opts=OPTS[m]||[];
+  const nf=opts.filter(o=>o.nf), fl=opts.filter(o=>!o.nf);
+  let html=`<div class="text-sm font-bold uppercase tracking-wider text-muted2 mb-3">Sin harinas ✓</div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      ${nf.map(o=>`<button class="text-left p-4 sm:p-3 rounded-xl bg-s2 border border-border text-base sm:text-sm text-ink hover:border-avocado hover:text-avocado transition-colors after:content-['_✓'] after:text-teal after:text-xs"
+        onclick="pickOpt('${o.t.replace(/'/g,"\\'")}')"><span>${o.t}</span></button>`).join('')}
+    </div>`;
+  if(fl.length){
+    html+=`<div class="text-sm font-bold uppercase tracking-wider text-muted2 mt-5 mb-3">Con harinas (puntual)</div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        ${fl.map(o=>`<button class="text-left p-4 sm:p-3 rounded-xl bg-s2 border border-border text-base sm:text-sm text-ink hover:border-amber hover:text-amber transition-colors"
+          onclick="pickOpt('${o.t.replace(/'/g,"\\'")}')"><span>${o.t}</span></button>`).join('')}
+      </div>`;
+  }
+  document.getElementById('mBody').innerHTML=html;
+  document.getElementById('overlay').classList.remove('hidden');
+}
+
+function pickOpt(v){ document.getElementById('mInput').value=v; }
+
+function applyModal(){
+  const v=document.getElementById('mInput').value;
+  const{d,m,el}=currentEdit;
+  if(d!==null){ saveMeal(d,m,v); if(el) el.value=v; }
+  document.getElementById('overlay').classList.add('hidden');
+}
+
+function closeOverlay(e){
+  if(e.target===document.getElementById('overlay'))
+    document.getElementById('overlay').classList.add('hidden');
+}
+
+// ════════════════ RACHA / STREAK ════════════════
+
+const HABIT_NAMES = [
+  '💧 Agua 2L',
+  '🚶 15 min movimiento',
+  '🥗 Verdura x2',
+  '🚫 Sin harinas',
+  '🌙 Cena < 22 hs',
+  '📖 Leer 3 páginas',
+  '🧴 Skincare',
+  '🚿 Bañarse',
+  '🛌 Acostarse 23 hs',
+];
+
+// key format: habits['YYYY-MM-DD_i'] = true/false
+// today key was: 'today_'+new Date().toDateString()+'_'+i
+// We need to migrate/also write to date-keyed format
+
+function dateKey(date, i) {
+  const d = new Date(date);
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `h_${y}-${m}-${dd}_${i}`;
+}
+
+function todayStr() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+
+function getHabitForDate(dateStr, i) {
+  // check new format first, then legacy
+  return !!(habits[`h_${dateStr}_${i}`] || habits[`today_${new Date(dateStr).toDateString()}_${i}`]);
+}
+
+function countHabitsForDate(dateStr) {
+  let c = 0;
+  for (let i = 0; i < 9; i++) if (getHabitForDate(dateStr, i)) c++;
+  return c;
+}
+
+function isDayComplete(dateStr) {
+  // "complete" = at least 7/9 habits
+  return countHabitsForDate(dateStr) >= 7;
+}
+
+function calcStreak() {
+  // walk backwards from today
+  let streak = 0;
+  const d = new Date();
+  while (true) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    const ds = `${y}-${m}-${dd}`;
+    if (isDayComplete(ds)) {
+      streak++;
+      d.setDate(d.getDate()-1);
+    } else break;
+  }
+  return streak;
+}
+
+function calcBestStreak() {
+  // find all registered dates and compute best streak
+  const dates = new Set();
+  Object.keys(habits).forEach(k => {
+    const m1 = k.match(/^h_(\d{4}-\d{2}-\d{2})_/);
+    if (m1) dates.add(m1[1]);
+    // legacy
+    const m2 = k.match(/^today_(.+)_\d$/);
+    if (m2) {
+      try {
+        const d = new Date(m2[1]);
+        if (!isNaN(d)) {
+          const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+          dates.add(ds);
+        }
+      } catch(e){}
+    }
+  });
+
+  const sorted = [...dates].sort();
+  let best = 0, cur = 0, prev = null;
+  sorted.forEach(ds => {
+    if (isDayComplete(ds)) {
+      if (prev) {
+        const p = new Date(prev), c = new Date(ds);
+        const diff = (c - p) / 86400000;
+        cur = diff === 1 ? cur + 1 : 1;
+      } else cur = 1;
+      if (cur > best) best = cur;
+      prev = ds;
+    } else { cur = 0; prev = null; }
+  });
+  return best;
+}
+
+function calcWeekPct() {
+  // Mon–today of current week
+  const today = new Date();
+  const dow = today.getDay(); // 0=sun
+  const mondayOffset = dow === 0 ? 6 : dow - 1;
+  let total = 0, done = 0;
+  for (let i = 0; i <= mondayOffset; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - mondayOffset + i);
+    const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    for (let j = 0; j < 9; j++) {
+      total++;
+      if (getHabitForDate(ds, j)) done++;
+    }
+  }
+  return total === 0 ? 0 : Math.round((done / total) * 100);
+}
+
+function calcWeekHabitPct(habitIdx) {
+  const today = new Date();
+  const dow = today.getDay();
+  const mondayOffset = dow === 0 ? 6 : dow - 1;
+  let total = 0, done = 0;
+  for (let i = 0; i <= mondayOffset; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - mondayOffset + i);
+    const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    total++;
+    if (getHabitForDate(ds, habitIdx)) done++;
+  }
+  return total === 0 ? 0 : Math.round((done / total) * 100);
+}
+
+function calcTotalDays() {
+  const dates = new Set();
+  Object.keys(habits).forEach(k => {
+    const m1 = k.match(/^h_(\d{4}-\d{2}-\d{2})_/);
+    if (m1) dates.add(m1[1]);
+  });
+  return dates.size;
+}
+
+function renderRacha() {
+  const streak = calcStreak();
+  const best   = calcBestStreak();
+  const weekPct = calcWeekPct();
+  const total  = calcTotalDays();
+
+  // hero numbers
+  document.getElementById('streakCount').textContent = streak;
+  document.getElementById('streakLabel').textContent =
+    streak === 0 ? 'Empezá hoy 💪' :
+    streak === 1 ? 'Primer día ✨' :
+    streak < 7   ? `¡Vas bien!` :
+    streak < 14  ? `¡Una semana! 🎉` :
+    streak < 30  ? `¡Imparable! 🚀` : `¡Leyenda! 🏆`;
+
+  document.getElementById('weekPct').textContent = weekPct + '%';
+  document.getElementById('weekPctLabel').textContent =
+    weekPct >= 80 ? '¡Semana excelente! 🌟' :
+    weekPct >= 60 ? 'Buena semana 👍' :
+    weekPct >= 40 ? 'Va para arriba 📈' :
+    weekPct > 0  ? 'Arrancando...' : 'Tildá tus hábitos';
+
+  document.getElementById('bestStreak').textContent = Math.max(streak, best);
+  document.getElementById('totalDays').textContent = total;
+
+  // per-habit bars
+  const barColors = ['bg-blue','bg-avocado','bg-teal','bg-rose','bg-amber'];
+  document.getElementById('habitBars').innerHTML = HABIT_NAMES.map((name, i) => {
+    const pct = calcWeekHabitPct(i);
+    return `<div>
+      <div class="flex justify-between items-center mb-1">
+        <span class="text-sm sm:text-base text-ink">${name}</span>
+        <span class="font-mono font-bold text-sm ${pct>=80?'text-avocado':pct>=50?'text-amber':'text-muted'}">${pct}%</span>
+      </div>
+      <div class="h-2.5 bg-s3 rounded-full overflow-hidden">
+        <div class="h-full rounded-full transition-all duration-500 ${barColors[i]}" style="width:${pct}%"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // dot calendar — last 30 days
+  const dots = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const ds = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const count = countHabitsForDate(ds);
+    const isToday = i === 0;
+    const dayName = d.toLocaleDateString('es-AR', {weekday:'short', day:'numeric', month:'short'});
+    const color =
+      count === 9 ? 'bg-avocado' :
+      count >= 6  ? 'bg-teal' :
+      count >= 1  ? 'bg-amber' : 'bg-s3 border border-border';
+    const ring = isToday ? 'ring-2 ring-white/30' : '';
+    dots.push(`
+      <div class="relative group cursor-default">
+        <div class="w-9 h-9 sm:w-8 sm:h-8 rounded-full ${color} ${ring} flex items-center justify-center">
+          ${isToday ? '<span class="text-[10px] font-bold text-white/70">hoy</span>' : ''}
+        </div>
+        <div class="dot-tooltip absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-s2 border border-border rounded-lg text-xs text-ink whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none z-10 transition-opacity">
+          ${dayName}: ${count}/9
+        </div>
+      </div>`);
+  }
+  document.getElementById('dotCalendar').innerHTML = dots.join('');
+}
+
+// ════════════════ OVERRIDE toggleHabit to also write date-keyed entry ════════════════
+function toggleHabit(i) {
+  const legacyKey = 'today_' + new Date().toDateString() + '_' + i;
+  const newKey    = dateKey(new Date(), i);
+  const current   = !!(habits[legacyKey] || habits[newKey]);
+  habits[legacyKey] = !current;
+  habits[newKey]    = !current;
+  save();
+  renderPlanner();
+  // refresh racha tab if visible
+  if (!document.getElementById('pane-racha').classList.contains('hidden')) renderRacha();
+}
+
+// ════════════════ TABS (override to handle racha) ════════════════
+function showTab(name){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.add('hidden'));
+  document.getElementById('pane-'+name).classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(t=>{
+    t.classList.remove('text-avocado','border-avocado');
+    if (!t.classList.contains('text-muted')) t.classList.add('text-muted');
+  });
+  const btn=document.querySelector(`[data-tab="${name}"]`);
+  if(btn){ btn.classList.remove('text-muted'); btn.classList.add('text-avocado','border-avocado'); }
+  if (name === 'racha') renderRacha();
+  if (name === 'objetivos') renderObjetivos();
+  if (name === 'chat') initChat();
+}
+
+function renderShopping(){
+  document.getElementById('exactQty').innerHTML=EXACT_QTY.map(q=>`
+    <div class="flex items-center gap-2 p-2.5 bg-s2 rounded-xl border border-border">
+      <span class="text-2xl">${q.e}</span>
+      <div>
+        <div class="text-xs sm:text-sm text-muted">${q.name}</div>
+        <div class="flex items-baseline gap-1">
+          <span class="font-mono font-bold text-lg sm:text-xl text-avocado">${q.n}</span>
+          <span class="text-xs text-muted2">${q.unit}</span>
+        </div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('storeGuide').innerHTML=STORE_GUIDE.map(s=>`
+    <div class="bg-s2 border border-border rounded-xl p-3">
+      <div class="text-sm sm:text-base font-semibold mb-1">${s.icon} ${s.place}</div>
+      <div class="text-xs sm:text-sm text-muted">${s.items}</div>
+    </div>`).join('');
+
+  const grid=document.getElementById('shopGrid');
+  grid.innerHTML='';
+  Object.entries(SHOPPING).forEach(([cat,items])=>{
+    const sec=document.createElement('div');
+    sec.className='bg-s1 border border-border rounded-xl overflow-hidden';
+    sec.innerHTML=`
+      <div class="px-4 py-3 border-b border-border font-semibold text-base">${cat}</div>
+      <div class="px-3 py-2">
+        ${items.map((item,idx)=>{
+          const key=cat+'_'+idx;
+          const done=!!shopDone[key];
+          return `<div class="shop-line flex items-center gap-3 py-3 border-b border-s3 cursor-pointer ${done?'opacity-40':''}" onclick="toggleShop(this,'${key}')">
+            <div class="w-5 h-5 flex-shrink-0 rounded border flex items-center justify-center transition-all
+              ${done?'bg-avocado border-avocado':'border-bord2'}">
+              ${done?'<span style="font-size:10px;color:#fff;font-weight:700">✓</span>':''}
+            </div>
+            <span class="shop-n flex-1 text-base sm:text-sm">${item.n}${item.opt?' <span class="text-xs text-muted2">(opc.)</span>':''}</span>
+            <span class="shop-q font-mono text-base sm:text-sm font-bold ${item.q.includes('c/n')||item.q.includes('revisar')?'text-amber':'text-avocado'} whitespace-nowrap">${item.q}</span>
+          </div>`;
+        }).join('')}
+      </div>`;
+    grid.appendChild(sec);
+  });
+}
+
+function toggleShop(el,key){
+  const done=!shopDone[key]; shopDone[key]=done; save();
+  el.classList.toggle('opacity-40',done);
+  const cb=el.querySelector('div');
+  if(done){ cb.classList.add('bg-avocado','border-avocado'); cb.classList.remove('border-bord2'); cb.innerHTML='<span style="font-size:9px;color:#fff;font-weight:700">✓</span>'; }
+  else { cb.classList.remove('bg-avocado','border-avocado'); cb.classList.add('border-bord2'); cb.innerHTML=''; }
+}
+
+function uncheckShop(){
+  document.querySelectorAll('.shop-line').forEach(el=>{
+    el.classList.remove('opacity-40');
+    const cb=el.querySelector('div');
+    cb.classList.remove('bg-avocado','border-avocado'); cb.classList.add('border-bord2'); cb.innerHTML='';
+  });
+  shopDone={}; save();
+}
+
+// ════════════════ BATCH ════════════════
+function renderBatch(){
+  document.getElementById('batchGrid').innerHTML=BATCH_SUNDAY.map(b=>`
+    <div class="bg-s2 border border-border rounded-xl p-4">
+      <div class="font-bold text-base text-ink mb-0.5">${b.title} <span class="text-xs text-muted font-normal">· ${b.time}</span></div>
+      <div class="text-sm font-medium text-teal mb-3">📅 ${b.days}</div>
+      <ul class="space-y-1.5">
+        ${b.steps.map(s=>`<li class="flex gap-2 text-sm text-muted"><span class="text-avocado font-bold">›</span>${s}</li>`).join('')}
+      </ul>
+    </div>`).join('');
+
+  document.getElementById('reuseGrid').innerHTML=REUSE.map(r=>`
+    <div class="bg-s1 rounded-xl border p-4 ${r.color}">
+      <div class="font-bold text-base text-ink mb-3">${r.prep}</div>
+      ${r.uses.map(u=>`<div class="flex gap-2 text-sm text-muted py-2 border-b border-border last:border-0">
+        <span class="text-teal">›</span>${u}
+      </div>`).join('')}
+    </div>`).join('');
+}
+
+// ════════════════ HABITS PAGE ════════════════
+function cardClass(type){
+  return {
+    green:'border-[#4a6830] bg-[#142010]',
+    amber:'border-[#5a4a18] bg-[#1a160d]',
+    rose: 'border-[#5a2830] bg-[#1a0d10]',
+    blue: 'border-[#1a3a5a] bg-[#0d1020]',
+  }[type]||'border-border bg-s1';
+}
+function titleClass(type){
+  return {green:'text-teal',amber:'text-amber',rose:'text-rose',blue:'text-blue'}[type]||'text-ink';
+}
+
+function renderHabitsPage(){
+  [
+    ['habitsInstall',HABITS_INSTALL],
+    ['habitBreak',HABITS_BREAK],
+    ['habitsNext',HABITS_NEXT],
+  ].forEach(([id,list])=>{
+    document.getElementById(id).innerHTML=list.map(h=>`
+      <div class="rounded-xl p-4 border ${cardClass(h.type)}">
+        <span class="text-3xl mb-2 block">${h.icon}</span>
+        <div class="font-bold text-base mb-2 ${titleClass(h.type)}">${h.title}</div>
+        <div class="text-sm sm:text-base text-[#a0a0b8] font-light leading-relaxed">${h.body}</div>
+        <span class="inline-block mt-3 text-xs font-bold uppercase tracking-wide px-2 py-1 rounded-md bg-s2 text-muted border border-border">${h.tag}</span>
+      </div>`).join('');
+  });
+}
+
+// ════════════════ OBJETIVOS ════════════════
+
+let objectives = [];
+let editingObjId = null;
+let currentCatFilter = 'all';
+
+const CAT_META = {
+  salud:        { label:'💪 Salud',         border:'border-[#4a6830]', bg:'bg-[#142010]', text:'text-teal'  },
+  alimentacion: { label:'🥗 Alimentación',  border:'border-[#3a4a5a]', bg:'bg-[#0d1220]', text:'text-blue'  },
+  personal:     { label:'🧠 Personal',      border:'border-[#5a4a18]', bg:'bg-[#1a160d]', text:'text-amber' },
+  proyecto:     { label:'💻 Proyecto',      border:'border-[#4a2a5a]', bg:'bg-[#150d1a]', text:'text-[#b890f8]' },
+};
+
+function loadObjectives() {
+  try { objectives = JSON.parse(localStorage.getItem('gp_objectives') || '[]'); } catch(e) { objectives = []; }
+}
+
+function saveObjectives() {
+  localStorage.setItem('gp_objectives', JSON.stringify(objectives));
+}
+
+function openNewObj() {
+  editingObjId = null;
+  document.getElementById('objModalTitle').textContent = 'Nuevo objetivo';
+  document.getElementById('objTitle').value = '';
+  document.getElementById('objDesc').value = '';
+  document.getElementById('objCat').value = 'salud';
+  document.getElementById('objDate').value = '';
+  document.getElementById('objProgress').value = 0;
+  document.getElementById('objProgressLabel').textContent = '0%';
+  document.getElementById('objOverlay').classList.remove('hidden');
+}
+
+function saveObj() {
+  const title = document.getElementById('objTitle').value.trim();
+  if (!title) { document.getElementById('objTitle').focus(); return; }
+
+  const obj = {
+    id:       editingObjId || Date.now().toString(),
+    title,
+    desc:     document.getElementById('objDesc').value.trim(),
+    cat:      document.getElementById('objCat').value,
+    date:     document.getElementById('objDate').value,
+    progress: parseInt(document.getElementById('objProgress').value),
+    done:     parseInt(document.getElementById('objProgress').value) === 100,
+    created:  editingObjId ? (objectives.find(o=>o.id===editingObjId)?.created || new Date().toISOString()) : new Date().toISOString(),
+  };
+
+  if (editingObjId) {
+    const idx = objectives.findIndex(o => o.id === editingObjId);
+    if (idx !== -1) objectives[idx] = obj;
+  } else {
+    objectives.unshift(obj);
+  }
+
+  saveObjectives();
+  document.getElementById('objOverlay').classList.add('hidden');
+  renderObjetivos();
+}
+
+function editObj(id) {
+  const obj = objectives.find(o => o.id === id);
+  if (!obj) return;
+  editingObjId = id;
+  document.getElementById('objModalTitle').textContent = 'Editar objetivo';
+  document.getElementById('objTitle').value = obj.title;
+  document.getElementById('objDesc').value = obj.desc || '';
+  document.getElementById('objCat').value = obj.cat || 'salud';
+  document.getElementById('objDate').value = obj.date || '';
+  document.getElementById('objProgress').value = obj.progress || 0;
+  document.getElementById('objProgressLabel').textContent = (obj.progress || 0) + '%';
+  document.getElementById('objOverlay').classList.remove('hidden');
+}
+
+function deleteObj(id) {
+  if (!confirm('¿Eliminar este objetivo?')) return;
+  objectives = objectives.filter(o => o.id !== id);
+  saveObjectives();
+  renderObjetivos();
+}
+
+function toggleObjDone(id) {
+  const obj = objectives.find(o => o.id === id);
+  if (!obj) return;
+  obj.done = !obj.done;
+  obj.progress = obj.done ? 100 : obj.progress;
+  saveObjectives();
+  renderObjetivos();
+}
+
+function filterObj(cat) {
+  currentCatFilter = cat;
+  document.querySelectorAll('.obj-cat-btn').forEach(btn => {
+    const isActive = btn.dataset.cat === cat;
+    btn.className = `obj-cat-btn font-semibold text-sm px-4 py-2 rounded-full border transition-colors ${
+      isActive ? 'border-avocado text-avocado bg-transparent' : 'border-border text-muted bg-s2'
+    }`;
+  });
+  renderObjetivos();
+}
+
+function renderObjetivos() {
+  const filtered = currentCatFilter === 'all'
+    ? objectives
+    : objectives.filter(o => o.cat === currentCatFilter);
+
+  // stats
+  const total = objectives.length;
+  const done  = objectives.filter(o => o.done).length;
+  const avgProgress = total === 0 ? 0 : Math.round(objectives.reduce((s,o) => s + (o.progress||0), 0) / total);
+
+  document.getElementById('objStats').innerHTML = [
+    { n: total,        label: 'Total',      color: 'text-ink'  },
+    { n: done,         label: 'Completados',color: 'text-avocado' },
+    { n: avgProgress+'%', label: 'Progreso prom.', color: 'text-teal' },
+  ].map(s => `
+    <div class="bg-s1 border border-border rounded-2xl p-4 text-center">
+      <div class="font-mono font-bold text-3xl sm:text-4xl ${s.color}">${s.n}</div>
+      <div class="text-sm text-muted mt-1">${s.label}</div>
+    </div>`).join('');
+
+  if (filtered.length === 0) {
+    document.getElementById('objList').innerHTML = '';
+    document.getElementById('objEmpty').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('objEmpty').classList.add('hidden');
+
+  const sorted = [...filtered].sort((a,b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    return new Date(b.created) - new Date(a.created);
+  });
+
+  document.getElementById('objList').innerHTML = sorted.map(obj => {
+    const meta = CAT_META[obj.cat] || CAT_META.salud;
+    const pct  = obj.progress || 0;
+    const daysLeft = obj.date ? Math.ceil((new Date(obj.date) - new Date()) / 86400000) : null;
+    const deadlineStr = daysLeft === null ? '' :
+      daysLeft < 0  ? `<span class="text-rose text-xs">Venció hace ${Math.abs(daysLeft)} días</span>` :
+      daysLeft === 0 ? `<span class="text-amber text-xs">Vence hoy</span>` :
+      `<span class="text-muted text-xs">${daysLeft} días restantes</span>`;
+
+    return `
+    <div class="rounded-2xl border p-4 sm:p-5 ${meta.border} ${meta.bg} ${obj.done ? 'opacity-60' : ''}">
+      <div class="flex items-start justify-between gap-3 mb-3">
+        <div class="flex items-start gap-3 flex-1 min-w-0">
+          <button onclick="toggleObjDone('${obj.id}')"
+            class="mt-0.5 w-6 h-6 flex-shrink-0 rounded-full border-2 flex items-center justify-center transition-all
+            ${obj.done ? 'bg-avocado border-avocado' : 'border-bord2 hover:border-avocado'}">
+            ${obj.done ? '<span style="font-size:12px;color:#fff;font-weight:700">✓</span>' : ''}
+          </button>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-base sm:text-lg ${obj.done ? 'line-through text-muted' : 'text-ink'} leading-tight">${obj.title}</div>
+            ${obj.desc ? `<div class="text-sm text-muted mt-1 leading-relaxed">${obj.desc}</div>` : ''}
+            <div class="flex items-center gap-3 mt-2 flex-wrap">
+              <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-s2 border border-border ${meta.text}">${meta.label}</span>
+              ${deadlineStr}
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-2 flex-shrink-0">
+          <button onclick="editObj('${obj.id}')" class="text-muted hover:text-ink text-lg px-1">✏️</button>
+          <button onclick="deleteObj('${obj.id}')" class="text-muted hover:text-rose text-lg px-1">🗑</button>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="flex items-center gap-3">
+        <div class="flex-1 h-2.5 bg-s3 rounded-full overflow-hidden">
+          <div class="h-full rounded-full transition-all duration-500 ${pct===100?'bg-avocado':pct>=60?'bg-teal':'bg-amber'}"
+            style="width:${pct}%"></div>
+        </div>
+        <span class="font-mono font-bold text-sm ${pct===100?'text-avocado':pct>=60?'text-teal':'text-amber'} w-10 text-right">${pct}%</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function closeObjOverlay(e) {
+  if (e.target === document.getElementById('objOverlay'))
+    document.getElementById('objOverlay').classList.add('hidden');
+}
+
+// Seed default objectives if empty
+function seedDefaultObjectives() {
+  if (objectives.length > 0) return;
+  objectives = [
+    { id:'1', title:'Volver a 85 kg', desc:'De 91 kg a 85 kg a ritmo de 500 g/semana (~12 semanas)', cat:'salud', date:'', progress:0, done:false, created: new Date().toISOString() },
+    { id:'2', title:'Retomar cross 3x/semana', desc:'Cuando los hábitos de alimentación sean automáticos', cat:'salud', date:'', progress:0, done:false, created: new Date().toISOString() },
+    { id:'3', title:'Sunday Prep todos los domingos', desc:'Arrollado + pastel de arroz + hamburguesas + verduras lavadas', cat:'alimentacion', date:'', progress:10, done:false, created: new Date().toISOString() },
+    { id:'4', title:'Leer 1 libro por mes', desc:'Mínimo 3 páginas por día', cat:'personal', date:'', progress:0, done:false, created: new Date().toISOString() },
+  ];
+  saveObjectives();
+}
+
+
+function autoFill(){
+  DAYS.forEach((_,i)=>{plan[i]={...TEMPLATE[i]};});
+  save(); renderPlanner();
+}
+function clearAll(){
+  if(confirm('¿Limpiar toda la semana?')){ plan={}; save(); renderPlanner(); }
+}
+
+// ════════════════ INIT ════════════════
+load();
+loadObjectives();
+seedDefaultObjectives();
+renderPlanner();
+renderShopping();
+renderBatch();
+renderHabitsPage();
+
+// ════════════════ CHAT IA ════════════════
+
+const SYSTEM_PROMPT = `Sos un asistente personal de salud, alimentación y bienestar para Gonzalo.
+
+CONTEXTO DE GONZALO:
+- Peso actual: 91 kg | Altura: 169 cm | Edad: 32 años
+- Objetivo: bajar a ~85 kg gradualmente (500 g/semana)
+- Actividad actual: sedentaria (trabajo de programador 9-18 hs)
+- Meta de actividad: retomar cross/gym 3 veces por semana
+- Sin dieta estricta, pero evita harinas refinadas (pan blanco, facturas, galletitas)
+
+PLAN ALIMENTARIO BASE:
+- Desayuno: café con leche + tostada integral con queso y miel + fruta, o tortilla de avena con crema de maní
+- Almuerzo: preparaciones batch del domingo (arrollado de pollo, pastel de arroz, hamburguesas de lentejas) + ensalada
+- Colación: fruta, frutos secos, galleta de arroz con queso
+- Merienda: té/licuado + tostada integral o tortilla de avena
+- Cena: bife de pollo + ensalada + huevo, o hamburguesas de lentejas, o atún con arroz integral
+
+PLATOS FAVORITOS: arrollado de pollo con acelga, pastel de arroz relleno de pollo, hamburguesas de lentejas y zanahoria, milanesa de pollo al horno, ensalada verano (pollo/atún+tomate+choclo+remolacha+palta+huevo), risotto de pollo y vegetales, pan de carne, guiso de lentejas, tarta integral de pollo y verdura
+
+HÁBITOS: 2L agua, 15 min movimiento, ½ plato verdura, sin harinas, cena < 22hs, leer 3 páginas, skincare, bañarse, acostarse 23hs
+
+ANÁLISIS CORPORAL (ISAK Sep 2024): Masa muscular 33.3 kg | Masa adiposa 25 kg (zona central) | Riesgo cardiovascular bajo
+
+INSTRUCCIONES GENERALES:
+- Respondé siempre en español, de manera clara, práctica y motivadora
+- Usá párrafos cortos y listas cuando ayuda
+- Usá emojis con moderación
+- Cuando des recetas: ingredientes con cantidades + pasos simples
+- Al hablar de calorías/macros: sé específico pero sin obsesionar
+
+INSTRUCCIÓN ESPECIAL — MODO HELADERA:
+Cuando el usuario te diga qué tiene en la heladera/alacena, seguí este flujo exacto:
+1. Primero revisá si con esos ingredientes podés armar alguno de sus platos favoritos listados arriba. Si podés, proponé ese plato primero.
+2. Si no alcanza para un plato favorito, sugerí una receta nueva y saludable adaptada a su estilo (sin harinas refinadas, proteína magra, verduras).
+3. Al final de tu respuesta, incluí exactamente este bloque especial para que la app busque el video:
+[YOUTUBE_SEARCH: nombre del plato o receta en español, corto y específico]
+Por ejemplo: [YOUTUBE_SEARCH: arrollado de pollo con acelga]
+Solo incluí este bloque cuando el contexto es una receta concreta.`;
+
+let chatHistory = [];
+let chatLoading = false;
+let fridgeMode = false;
+
+// ── API Keys ──
+function getChatApiKey() { return localStorage.getItem('gp_api_key') || ''; }
+function getYtApiKey()   { return localStorage.getItem('gp_yt_key')  || ''; }
+
+function saveApiKey() {
+  const ak = document.getElementById('apiKeyInput').value.trim();
+  const yk = document.getElementById('ytKeyInput').value.trim();
+  if (!ak.startsWith('sk-ant-')) { alert('La API key debe empezar con "sk-ant-"'); return; }
+  localStorage.setItem('gp_api_key', ak);
+  if (yk) localStorage.setItem('gp_yt_key', yk);
+  document.getElementById('chatSetup').classList.add('hidden');
+  appendSystemMsg('✅ ¡Configuración guardada! ' + (yk ? 'Puedo buscar videos de recetas en YouTube 🎬' : 'Si querés videos de recetas, agregá tu API key de YouTube.'));
+}
+
+function showKeySetup() {
+  const s = document.getElementById('chatSetup');
+  s.classList.toggle('hidden');
+  if (!s.classList.contains('hidden')) {
+    document.getElementById('apiKeyInput').value = getChatApiKey();
+    document.getElementById('ytKeyInput').value  = getYtApiKey();
+  }
+}
+
+// ── Meal-time dynamic button ──
+function getMealContext() {
+  const h = new Date().getHours();
+  if (h >= 6  && h < 11) return { meal:'desayuno',  emoji:'☕', label:'¿Qué desayuno hoy?' };
+  if (h >= 11 && h < 15) return { meal:'almuerzo',  emoji:'🍽️', label:'¿Qué almuerzo hoy?' };
+  if (h >= 15 && h < 18) return { meal:'merienda',  emoji:'🫖', label:'¿Qué meriendo hoy?' };
+  if (h >= 18 && h < 23) return { meal:'cena',      emoji:'🌙', label:'¿Qué ceno hoy?' };
+  return                         { meal:'colacion',  emoji:'🍎', label:'¿Qué como ahora?' };
+}
+
+function setMealTimeBtn() {
+  const ctx = getMealContext();
+  const btn = document.getElementById('btnMealTime');
+  if (!btn) return;
+  btn.innerHTML = `<span class="text-2xl mr-2">${ctx.emoji}</span>${ctx.label} <span class="text-xs text-avocado/60 ml-1">→ te pregunto qué tenés</span>`;
+}
+
+// ── Fridge flow starter ──
+function startMealFlow() {
+  const ctx = getMealContext();
+  document.getElementById('chatSuggestions').classList.add('hidden');
+  fridgeMode = true;
+
+  appendSystemMsg(`${ctx.emoji} ¡Buena hora para el ${ctx.meal}! ¿Qué tenés en la heladera o alacena ahora mismo? Decime los ingredientes que tengas a mano y te sugiero qué preparar 🥑`);
+
+  // inject a hint in history so the AI knows the context
+  chatHistory.push({
+    role: 'user',
+    content: `Quiero saber qué ${ctx.meal} hacer ahora. Voy a contarte qué tengo disponible.`
+  });
+  chatHistory.push({
+    role: 'assistant',
+    content: `¡Perfecto! Contame qué ingredientes tenés en la heladera y alacena ahora mismo, y te sugiero algo rico y saludable para tu ${ctx.meal} 🥑`
+  });
+
+  document.getElementById('chatInput').focus();
+}
+
+// ── YouTube search ──
+async function searchYouTube(query) {
+  const key = getYtApiKey();
+  if (!key) return null;
+  try {
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query + ' receta saludable')}&type=video&maxResults=1&relevanceLanguage=es&key=${key}`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    const item = data.items?.[0];
+    if (!item) return null;
+    return {
+      videoId:   item.id.videoId,
+      title:     item.snippet.title,
+      channel:   item.snippet.channelTitle,
+      thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url,
+    };
+  } catch { return null; }
+}
+
+function renderVideoCard(video) {
+  return `
+    <a href="https://www.youtube.com/watch?v=${video.videoId}" target="_blank"
+      class="flex items-center gap-3 mt-3 p-3 bg-s3 rounded-xl border border-border hover:border-avocado transition-colors no-underline group">
+      <div class="relative flex-shrink-0">
+        <img src="${video.thumbnail}" alt="thumb" class="w-20 h-14 object-cover rounded-lg">
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center shadow-lg">
+            <span class="text-white text-xs ml-0.5">▶</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-semibold text-ink leading-tight line-clamp-2 group-hover:text-avocado">${escHtml(video.title)}</div>
+        <div class="text-xs text-muted mt-1">📺 ${escHtml(video.channel)}</div>
+        <div class="text-xs text-avocado mt-0.5">Ver en YouTube →</div>
+      </div>
+    </a>`;
+}
+
+// ── Message rendering ──
+function appendSystemMsg(text, videoHtml = '') {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'flex justify-start';
+  div.innerHTML = `
+    <div class="max-w-[88%] bg-s2 border border-border rounded-2xl rounded-tl-sm px-4 py-3 text-base text-ink leading-relaxed">
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="text-lg">🥑</span>
+        <span class="font-mono text-xs text-avocado font-bold uppercase tracking-wider">Asistente</span>
+      </div>
+      <div class="chat-content">${formatChatText(text)}</div>
+      ${videoHtml}
+    </div>`;
+  msgs.appendChild(div);
+  scrollChat();
+}
+
+function appendUserMsg(text) {
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'flex justify-end';
+  div.innerHTML = `
+    <div class="max-w-[88%] bg-avocado rounded-2xl rounded-tr-sm px-4 py-3 text-base text-white leading-relaxed">
+      ${escHtml(text)}
+    </div>`;
+  msgs.appendChild(div);
+  scrollChat();
+}
+
+function appendLoadingMsg() {
+  const msgs = document.getElementById('chatMessages');
+  const id = 'loading-' + Date.now();
+  const div = document.createElement('div');
+  div.id = id;
+  div.className = 'flex justify-start';
+  div.innerHTML = `
+    <div class="max-w-[88%] bg-s2 border border-border rounded-2xl rounded-tl-sm px-4 py-3">
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="text-lg">🥑</span>
+        <span class="font-mono text-xs text-avocado font-bold uppercase tracking-wider">Asistente</span>
+      </div>
+      <div class="flex gap-1.5 items-center py-1">
+        <span class="w-2.5 h-2.5 rounded-full bg-avocado animate-bounce" style="animation-delay:0ms"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-avocado animate-bounce" style="animation-delay:150ms"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-avocado animate-bounce" style="animation-delay:300ms"></span>
+      </div>
+    </div>`;
+  msgs.appendChild(div);
+  scrollChat();
+  return id;
+}
+
+function replaceLoadingMsg(loadingId, text, videoHtml = '') {
+  const el = document.getElementById(loadingId);
+  if (el) {
+    el.querySelector('div').innerHTML = `
+      <div class="flex items-center gap-2 mb-1.5">
+        <span class="text-lg">🥑</span>
+        <span class="font-mono text-xs text-avocado font-bold uppercase tracking-wider">Asistente</span>
+      </div>
+      <div class="chat-content text-base text-ink leading-relaxed">${formatChatText(text)}</div>
+      ${videoHtml}`;
+  }
+  scrollChat();
+}
+
+function formatChatText(text) {
+  return escHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^#{1,3}\s+(.+)$/gm, '<div class="font-bold text-avocado mt-3 mb-1 text-base">$1</div>')
+    .replace(/^[-•]\s+(.+)$/gm, '<div class="flex gap-2 mt-1.5"><span class="text-avocado flex-shrink-0 font-bold">›</span><span>$1</span></div>')
+    .replace(/^\d+\.\s+(.+)$/gm, '<div class="flex gap-2 mt-1.5 ml-1"><span class="text-avocado/70 flex-shrink-0">·</span><span>$1</span></div>')
+    .replace(/\n\n/g, '<div class="mt-2.5"></div>')
+    .replace(/\n/g, '<br>');
+}
+
+function escHtml(t) {
+  return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function scrollChat() {
+  const msgs = document.getElementById('chatMessages');
+  setTimeout(() => msgs.scrollTop = msgs.scrollHeight, 60);
+}
+
+// ── Main send ──
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text || chatLoading) return;
+
+  const apiKey = getChatApiKey();
+  if (!apiKey) { document.getElementById('chatSetup').classList.remove('hidden'); return; }
+
+  document.getElementById('chatSuggestions').classList.add('hidden');
+
+  chatLoading = true;
+  document.getElementById('chatSendBtn').disabled = true;
+  document.getElementById('chatSendIcon').textContent = '…';
+  input.value = '';
+  input.style.height = 'auto';
+
+  appendUserMsg(text);
+  chatHistory.push({ role: 'user', content: text });
+
+  const loadingId = appendLoadingMsg();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        messages: chatHistory,
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err?.error?.message || `Error ${res.status}`);
+    }
+
+    const data = await res.json();
+    let reply = data.content?.[0]?.text || '(sin respuesta)';
+
+    // Extract YouTube search tag if present
+    const ytMatch = reply.match(/\[YOUTUBE_SEARCH:\s*(.+?)\]/);
+    let videoHtml = '';
+    if (ytMatch) {
+      reply = reply.replace(/\[YOUTUBE_SEARCH:.*?\]/g, '').trim();
+      const ytKey = getYtApiKey();
+      if (ytKey) {
+        const video = await searchYouTube(ytMatch[1]);
+        if (video) videoHtml = renderVideoCard(video);
+        else videoHtml = `<div class="text-xs text-muted mt-2">🎬 No encontré video para "${escHtml(ytMatch[1])}"</div>`;
+      } else {
+        videoHtml = `<div class="text-xs text-muted mt-2 border border-border rounded-lg p-2">🎬 Para ver el video de la receta, agregá tu API key de YouTube en la configuración.</div>`;
+      }
+    }
+
+    chatHistory.push({ role: 'assistant', content: reply });
+    if (chatHistory.length > 24) chatHistory = chatHistory.slice(-24);
+
+    replaceLoadingMsg(loadingId, reply, videoHtml);
+    fridgeMode = false;
+
+  } catch (err) {
+    replaceLoadingMsg(loadingId, `❌ Error: ${err.message}. Verificá tu API key.`);
+  } finally {
+    chatLoading = false;
+    document.getElementById('chatSendBtn').disabled = false;
+    document.getElementById('chatSendIcon').textContent = '↑';
+    input.focus();
+  }
+}
+
+function sendSuggestion(text) {
+  document.getElementById('chatInput').value = text;
+  sendChat();
+}
+
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function initChat() {
+  setMealTimeBtn();
+  const hasKey = !!getChatApiKey();
+  document.getElementById('chatSetup').classList.toggle('hidden', hasKey);
+  if (chatHistory.length === 0) {
+    appendSystemMsg('¡Hola Gonzalo! 👋 Soy tu asistente de salud y alimentación. Tengo el contexto de tu plan, tus hábitos y tus objetivos cargados. Preguntame lo que quieras — recetas, calorías, ejercicio — o tocá el botón de arriba para que te sugiera qué comer ahora según lo que tenés en casa 🥑');
+  }
+}
+
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .catch(err => console.log('SW registration failed:', err));
+  });
+}
+
+document.querySelector('[data-tab="planner"]').classList.add('text-avocado','border-avocado');
+document.querySelector('[data-tab="planner"]').classList.remove('text-muted');
+</script>
+</body>
+</html>
