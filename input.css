@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Outfit (variable font, all weights) ── */
+/* latin-ext */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url(./fonts/outfit-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url(./fonts/outfit-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ── Space Mono 400 ── */
+/* latin-ext */
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./fonts/space-mono-400-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./fonts/space-mono-400-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ── Space Mono 700 ── */
+/* latin-ext */
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./fonts/space-mono-700-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./fonts/space-mono-700-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ── Custom styles ── */
+html { font-size: 18px; }
+@media (min-width: 640px) { html { font-size: 16px; } }
+
+body { background: #0c0c0e; color: #e2e2ea; font-family: 'Outfit', sans-serif; }
+
+.meal-input {
+  width: 100%; background: #1a1a1f; border: 1px solid transparent;
+  border-radius: 8px; padding: 10px 12px; font-size: 16px; font-family: 'Outfit', sans-serif;
+  color: #e2e2ea; line-height: 1.5; resize: none; min-height: 60px;
+  transition: border-color 0.12s; cursor: pointer;
+}
+@media (min-width: 640px) {
+  .meal-input { font-size: 14px; min-height: 52px; padding: 8px 10px; }
+}
+.meal-input:hover, .meal-input:focus { border-color: #3a3a48; outline: none; background: #1e1e26; cursor: text; }
+.meal-input::placeholder { color: #50505f; font-style: italic; }
+
+.modal-input {
+  width: 100%; background: #1a1a1f; border: 1px solid #2c2c36;
+  border-radius: 8px; padding: 14px; color: #e2e2ea; font-size: 17px;
+  font-family: 'Outfit', sans-serif; resize: none;
+}
+@media (min-width: 640px) { .modal-input { font-size: 15px; padding: 12px; } }
+.modal-input:focus { outline: none; border-color: #3a3a48; }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #0c0c0e; }
+::-webkit-scrollbar-thumb { background: #3a3a48; border-radius: 3px; }
+#dayGrid::-webkit-scrollbar { display: none; }
+#dayGrid { scrollbar-width: none; }
+.tab-btn { transition: all 0.15s; }
+.shop-line { transition: opacity 0.12s; }
+.habit-card { transition: all 0.15s; user-select: none; }
+select, input[type="text"], input[type="date"] {
+  font-family: 'Outfit', sans-serif;
+  background: #1a1a1f;
+  color: #e2e2ea;
+}
+input[type="range"] { cursor: pointer; }
+.chat-content strong { color: #e2e2ea; font-weight: 700; }
+.chat-content em { color: #b0b8a8; font-style: italic; }
+#chatMessages { scroll-behavior: smooth; }
+#chatInput { font-family: 'Outfit', sans-serif; }
+.suggest-btn { transition: all 0.15s; }
+
+/* Mobile font boosts — only below 640px */
+@media (max-width: 639px) {
+  .text-xs   { font-size: 0.78rem !important; }
+  .text-sm   { font-size: 0.95rem !important; }
+  .text-base { font-size: 1.1rem  !important; }
+  .text-lg   { font-size: 1.25rem !important; }
+  .text-xl   { font-size: 1.4rem  !important; }
+  .text-2xl  { font-size: 1.6rem  !important; }
+  .font-mono { letter-spacing: -0.3px; }
+
+  /* Streak numbers stay big */
+  .text-5xl  { font-size: 3.2rem !important; }
+  .text-6xl  { font-size: 3.5rem !important; }
+
+  /* Tab bar */
+  .tab-btn   { font-size: 1rem !important; padding: 14px 16px !important; }
+
+  /* Buttons */
+  .btn-mobile { font-size: 1rem !important; padding: 10px 18px !important; }
+
+  /* Habit cards */
+  #dailyHabits .text-sm  { font-size: 1rem !important; }
+  #dailyHabits .text-xs  { font-size: 0.85rem !important; }
+
+  /* Shopping items */
+  .shop-n { font-size: 1rem !important; }
+  .shop-q { font-size: 0.95rem !important; }
+
+  /* Meal labels */
+  .meal-tag-label { font-size: 0.8rem !important; }
+
+  /* Dot calendar tooltip — keep small */
+  .dot-tooltip { font-size: 0.75rem !important; }
+}
