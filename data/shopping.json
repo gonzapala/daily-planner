@@ -1,0 +1,79 @@
+{
+  "exactQuantities": [
+    { "emoji": "🥚", "name": "Huevos", "amount": "9–11", "unit": "unidades" },
+    { "emoji": "🍗", "name": "Bifes de pollo", "amount": "5–6", "unit": "unidades ~120 g" },
+    { "emoji": "🍗", "name": "Pechuga (arrollado)", "amount": "1", "unit": "pechuga grande" },
+    { "emoji": "🐟", "name": "Atún (latas)", "amount": "3", "unit": "latas 170 g" },
+    { "emoji": "🍅", "name": "Tomates", "amount": "7–8", "unit": "medianos" },
+    { "emoji": "🥬", "name": "Lechuga + rúcula", "amount": "1+1", "unit": "unid. + bolsa" },
+    { "emoji": "🥕", "name": "Zanahorias", "amount": "6–7", "unit": "unidades" },
+    { "emoji": "🥑", "name": "Paltas", "amount": "3–4", "unit": "unidades" },
+    { "emoji": "🍌", "name": "Bananas", "amount": "5–6", "unit": "unidades" },
+    { "emoji": "🍎", "name": "Manzanas verdes", "amount": "5–6", "unit": "unidades" },
+    { "emoji": "🍋", "name": "Limones", "amount": "3", "unit": "unidades" },
+    { "emoji": "🧅", "name": "Cebollas", "amount": "3", "unit": "unidades" }
+  ],
+  "storeGuide": [
+    { "icon": "🥩", "place": "Carnicería", "items": "Pechuga entera, bifes de pollo, patamuslos, carne picada" },
+    { "icon": "🥬", "place": "Verdulería", "items": "Tomates, lechuga, rúcula, zanahoria, remolacha, palta, acelga, frutas" },
+    { "icon": "🛒", "place": "Supermercado", "items": "Huevos, lácteos, arroz integral, lentejas, avena, galletas arroz, atún" }
+  ],
+  "categories": {
+    "🥩 Carnes y Proteínas": [
+      { "name": "Pechuga de pollo entera (arrollado)", "quantity": "1 pechuga ~400 g" },
+      { "name": "Bifes de pechuga / suprema de pollo", "quantity": "600 g (~6 bifes)" },
+      { "name": "Patamuslos de pollo (domingo)", "quantity": "2–3 unidades" },
+      { "name": "Carne picada especial (opcional)", "quantity": "300–400 g", "optional": true },
+      { "name": "Atún al natural (latas)", "quantity": "3 × 170 g" },
+      { "name": "Huevos", "quantity": "12 unidades" },
+      { "name": "Jamón natural fetas (colación opt.)", "quantity": "100 g", "optional": true }
+    ],
+    "🥬 Verdulería": [
+      { "name": "Tomates / cherry", "quantity": "7–8 unid. o 500 g cherry" },
+      { "name": "Lechuga mantecosa", "quantity": "1 unidad grande" },
+      { "name": "Rúcula", "quantity": "1 bolsa 100 g" },
+      { "name": "Zanahoria", "quantity": "6–7 unidades" },
+      { "name": "Remolacha", "quantity": "3–4 unidades" },
+      { "name": "Acelga (para arrollado)", "quantity": "1 atado" },
+      { "name": "Palta", "quantity": "3–4 unidades" },
+      { "name": "Choclo (ensalada verano)", "quantity": "1 lata o 2 mazorcas" },
+      { "name": "Cebolla morada", "quantity": "2 unidades" },
+      { "name": "Pimiento rojo / verde", "quantity": "2 unidades" },
+      { "name": "Champiñones (risotto)", "quantity": "200 g" },
+      { "name": "Ajo", "quantity": "1 cabeza" },
+      { "name": "Limón", "quantity": "3 unidades" },
+      { "name": "Manzana verde", "quantity": "5–6 unidades" },
+      { "name": "Banana", "quantity": "6 unidades" },
+      { "name": "Fruta de estación (durazno, uvas…)", "quantity": "~500 g" }
+    ],
+    "🥛 Lácteos": [
+      { "name": "Leche descremada", "quantity": "1 litro" },
+      { "name": "Yogurt descremado (potes)", "quantity": "6–7 potes" },
+      { "name": "Queso port salut light", "quantity": "200 g" },
+      { "name": "Queso untable descremado", "quantity": "1 pote 200 g" },
+      { "name": "Queso rallado", "quantity": "100 g" }
+    ],
+    "🌾 Almacén": [
+      { "name": "Arroz integral", "quantity": "500 g" },
+      { "name": "Lentejas (latas)", "quantity": "2 latas" },
+      { "name": "Garbanzos (lata)", "quantity": "1 lata" },
+      { "name": "Avena instantánea", "quantity": "500 g" },
+      { "name": "Galletas de arroz", "quantity": "2 paquetes" },
+      { "name": "Pan lactal integral (Bimbo/Fargo)", "quantity": "1 paquete" },
+      { "name": "Granola sin azúcar", "quantity": "250 g" },
+      { "name": "Cereales fibra (All-Bran / Fitness)", "quantity": "1 caja" },
+      { "name": "Crema de maní sin azúcar", "quantity": "1 frasco" },
+      { "name": "Mermelada sin azúcar (Beepure)", "quantity": "1 frasco" }
+    ],
+    "🧴 Condimentos": [
+      { "name": "Aceite de oliva", "quantity": "c/n semana" },
+      { "name": "Mostaza", "quantity": "c/n" },
+      { "name": "Miel", "quantity": "c/n" },
+      { "name": "Semillas (chía + sésamo + girasol)", "quantity": "1 mix 200 g" },
+      { "name": "Frutos secos (nueces + almendras)", "quantity": "200 g" },
+      { "name": "Caldo de verdura/pollo en cubitos", "quantity": "1 caja" },
+      { "name": "Rocío vegetal", "quantity": "1 aerosol" },
+      { "name": "Sal, pimienta, ajo polvo, orégano", "quantity": "revisar stock" }
+    ]
+  }
+}

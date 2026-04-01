@@ -1,0 +1,88 @@
+{
+  "sundayPrep": [
+    {
+      "title": "🍗 Arrollado de pollo con acelga",
+      "days": "Lun almuerzo + Mar almuerzo",
+      "time": "40 min",
+      "steps": [
+        "Abrí la pechuga en libro, untá con mostaza y ajo",
+        "Rellenala con acelga blanqueada + huevo duro + queso rallado",
+        "Enrollá y atá con hilo o envolvé en aluminio",
+        "Horno 180°C × 35 min, dejá enfriar y cortá en rodajas",
+        "Guardá en heladera en contenedor cerrado"
+      ]
+    },
+    {
+      "title": "🍚 Pastel de arroz con pollo",
+      "days": "Mié almuerzo",
+      "time": "30 min",
+      "steps": [
+        "Cocinar 1 taza de arroz integral (extra para guarnición)",
+        "Rehogar cebolla + zanahoria + pollo picado con especias",
+        "Armar: capa arroz / pollo / arroz en fuente",
+        "Gratinar con queso rallado 15 min a 200°C",
+        "Dura 3–4 días en heladera"
+      ]
+    },
+    {
+      "title": "🍔 Hamburguesas de lentejas",
+      "days": "Jue almuerzo + Vie almuerzo",
+      "time": "20 min",
+      "steps": [
+        "Escurrí 2 latas de lentejas y pisalas con tenedor",
+        "Mezclá con 2–3 zanahorias ralladas, 2 huevos, 3 cdas avena, ajo, sal",
+        "Formá 6–8 hamburguesas",
+        "Cocinás 4 ahora, las otras 4 van al freezer",
+        "Vuelta y vuelta en sartén ~4 min c/lado"
+      ]
+    },
+    {
+      "title": "🥕 Verduras y bases lavadas",
+      "days": "Toda la semana",
+      "time": "15 min",
+      "steps": [
+        "Rallá 4 zanahorias → tupper en heladera",
+        "Lavá y secá rúcula y lechuga → bolsa con papel",
+        "Herví 3 huevos duros → heladera listos",
+        "Dejá paltas verdes a temperatura ambiente",
+        "Arroz integral extra: dura 4–5 días en tupper cerrado"
+      ]
+    }
+  ],
+  "reuse": [
+    {
+      "prep": "Arrollado de pollo",
+      "color": "border-[#4a6830]",
+      "uses": [
+        "Lunes almuerzo: rodajas con ensalada de zanahoria y remolacha",
+        "Martes almuerzo: rodajas frías con lechuga, tomate y huevo duro"
+      ]
+    },
+    {
+      "prep": "Pastel de arroz",
+      "color": "border-[#3a4a5a]",
+      "uses": [
+        "Miércoles almuerzo: porción caliente con ensalada",
+        "El arroz extra sirve de guarnición lunes y jueves"
+      ]
+    },
+    {
+      "prep": "Hamburguesas de lentejas",
+      "color": "border-[#5a4a28]",
+      "uses": [
+        "Jueves almuerzo: 2 hamburguesas + ensalada grande",
+        "Viernes almuerzo: 2 hamburguesas del freezer",
+        "Cena express cualquier día si llegás tarde"
+      ]
+    },
+    {
+      "prep": "Arroz integral cocido",
+      "color": "border-[#2a4a4a]",
+      "uses": [
+        "Lunes cena: guarnición con bife de pollo",
+        "Jueves cena: con atún y tomate",
+        "Dura 5 días en heladera en tupper cerrado"
+      ]
+    }
+  ]
+}

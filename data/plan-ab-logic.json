@@ -1,0 +1,21 @@
+{
+  "intro": "Cocinás una vez, comés dos o tres veces. La clave es elegir proteínas que se reutilicen fácil y tener siempre los acompañamientos base listos.",
+  "proteinRules": [
+    { "title": "Pollo al horno (patamuslo)", "sub": "Rinde 2 comidas · Semana A", "body": "Mediodía: con papas y ensalada\nNoche: desmenuzado en ensalada verano, multicolor o tibia" },
+    { "title": "Carne salteada (cuadril / picada)", "sub": "Rinde 3 comidas · Semana B", "body": "Lunes noche: arroz con carne\nMartes almuerzo: arroz sobrante + ensalada\nMartes noche: tacos con la misma carne" },
+    { "title": "Milanesas de pollo", "sub": "Rinde 2 comidas · Semana A", "body": "Jueves noche: milanesas + ensalada\nViernes almuerzo: sobrante + arroz + ensalada" },
+    { "title": "Hamburguesas de pollo", "sub": "Rinde 2 comidas · Semana B", "body": "Hacer 4–6 de una vez, congelar la mitad\nJueves noche: 2 hambur. + ensalada\nViernes almuerzo: sobrantes o del freezer" },
+    { "title": "Chop suey / risotto / salteado", "sub": "Rinde 2 comidas", "body": "Hacés el doble\nNoche / mediodía: plato recién hecho\nSiguiente: recalentado + verdura fresca" },
+    { "title": "Atún + ensalada verano", "sub": "Sin cocción · ambas semanas", "body": "Lunes almuerzo fijo en A y B\n10 minutos, completo: proteína + verdura + hidrato" }
+  ],
+  "saladOptions": [
+    { "title": "Ensalada verano", "body": "Atún o pollo + tomate, choclo, zanahoria rayada, remolacha, palta, huevo" },
+    { "title": "Ensalada multicolor", "body": "Pollo o atún + crutones + cebolla morada + mayonesa de apio + arroz integral" },
+    { "title": "Ensalada tibia", "body": "Verduras salteadas + huevo + arroz integral + queso" },
+    { "title": "Tomate, zanahoria, choclo y arroz", "body": "+ huevo hervido + garbanzos o lentejas" },
+    { "title": "Papa, huevo, tomate y remolacha", "body": "Papa hervida + huevo duro + tomate + remolacha" },
+    { "title": "Puré palta + tomate + huevo", "body": "Palta pisada con limón + tomate + huevo hervido. Sin cocción, muy saciante" }
+  ],
+  "monthRotation": ["A", "B", "A", "B", "A o B"],
+  "monthNote": "En 4 semanas probás cada plato 2 veces. Fines de semana libres o con merluza, churrasco, fideos, ravioles. El viernes siempre queda como válvula de escape."
+}

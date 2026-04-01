@@ -1,0 +1,62 @@
+{
+  "days": ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
+  "batchPairs": {
+    "0_almuerzo": "pollo",
+    "1_almuerzo": "pollo",
+    "1_cena": "pollo",
+    "2_almuerzo": "arroz",
+    "3_almuerzo": "hamblen",
+    "4_almuerzo": "hamblen"
+  },
+  "template": {
+    "0": {
+      "desayuno": "☕ Café + tostada integral con queso, miel y fruta + granola",
+      "almuerzo": "🍗 Arrollado de pollo con acelga + ensalada zanahoria y remolacha (preparado domingo)",
+      "colacion": "🍎 1 manzana",
+      "merienda": "🍵 Té + galleta arroz con queso y semillas",
+      "cena": "🍗 Bife de pollo + arroz integral + tomate + zanahoria"
+    },
+    "1": {
+      "desayuno": "☕ Café + tortilla de avena con crema de maní, banana y granola",
+      "almuerzo": "🍗 Arrollado de pollo (sobrante) + ensalada lechuga, tomate y huevo",
+      "colacion": "🍎 1 durazno o ciruela",
+      "merienda": "🥣 Té rojo + tortilla de avena con crema de maní y frutos secos",
+      "cena": "🍗 Bife de pollo + ensalada mixta + 1 huevo"
+    },
+    "2": {
+      "desayuno": "🥑 Café + galleta arroz con palta, huevo y semillas",
+      "almuerzo": "🍚 Pastel de arroz con pollo gratinado + ensalada (preparado domingo)",
+      "colacion": "🥜 Puñado de nueces y almendras",
+      "merienda": "🍦 Yogurt desc. + granola + frutos secos + banana",
+      "cena": "🥚 Omelette de 2 huevos con queso y tomate"
+    },
+    "3": {
+      "desayuno": "🥛 Yogurt desc. + cereales + granola + fruta + frutos secos",
+      "almuerzo": "🍔 Hamburguesas de lentejas + ensalada lechuga, tomate y zanahoria (preparado domingo)",
+      "colacion": "🍇 Uvas + barrita de cereales",
+      "merienda": "🧋 Licuado banana y frutilla + galleta arroz con queso",
+      "cena": "🐟 Atún + arroz integral + tomate + verduras"
+    },
+    "4": {
+      "desayuno": "☕ Café + tostada integral con queso, miel y fruta",
+      "almuerzo": "🍔 Hamburguesas de lentejas (sobrante) + ensalada rúcula y tomate",
+      "colacion": "🥛 ½ vaso yogurt descremado + frutos secos",
+      "merienda": "🥑 Galleta arroz con palta y huevo revuelto",
+      "cena": "🍗 Bife de pollo + ensalada mixta + 1 huevo"
+    },
+    "5": {
+      "desayuno": "🧋 Licuado de frutas + galleta arroz con queso y semillas",
+      "almuerzo": "🍛 Risotto de pollo y vegetales con arroz integral",
+      "colacion": "🍎 Fruta a elección",
+      "merienda": "☕ Café o té + fruta + frutos secos",
+      "cena": "🆓 Comida libre (con moderación)"
+    },
+    "6": {
+      "desayuno": "☕ Café + tostada integral con queso, miel y fruta",
+      "almuerzo": "🥩 Patamuslo pollo al horno + ensalada tomate, garbanzos y queso",
+      "colacion": "🍎 1 fruta",
+      "merienda": "🍦 Yogurt desc. + granola + fruta",
+      "cena": "🥗 Ensalada verano: atún / pollo + tomate, choclo, zanahoria, palta, huevo"
+    }
+  }
+}

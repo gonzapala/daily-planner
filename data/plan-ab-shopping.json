@@ -1,0 +1,68 @@
+{
+  "intro": "Lista para 1 mes (4 semanas, 2× A + 2× B) · 1 persona. Cantidades orientativas. Tocá cada ítem para tildarlo.",
+  "note": "Comprá carnes y verduras frescas semana a semana. Almacén y condimentos una vez por mes. Congelados como respaldo.",
+  "categories": {
+    "🥩 Carnes (x4 semanas)": [
+      { "name": "Pechuga / suprema de pollo", "quantity": "~2.4 kg" },
+      { "name": "Patamuslo de pollo", "quantity": "8–10 unidades" },
+      { "name": "Cuadril / ojo de bife / bife chorizo", "quantity": "~1.2 kg" },
+      { "name": "Carne picada especial", "quantity": "~800 g" },
+      { "name": "Merluza (para fines de semana)", "quantity": "~600 g × 2", "variable": true },
+      { "name": "Milanesas de pollo (o pechuga para milanar)", "quantity": "~800 g" }
+    ],
+    "🐟 Latas y conservas": [
+      { "name": "Atún al natural", "quantity": "12 latas × 170 g" },
+      { "name": "Garbanzos en lata", "quantity": "4 latas" },
+      { "name": "Lentejas en lata", "quantity": "4 latas" },
+      { "name": "Choclo escurrido / en lata", "quantity": "4 latas" },
+      { "name": "Salsa de tomate", "quantity": "4 tetras o latas" }
+    ],
+    "🥬 Verdulería (compra semanal)": [
+      { "name": "Tomates / cherry", "quantity": "7–8 unid./semana", "variable": true },
+      { "name": "Lechuga + rúcula", "quantity": "1 lechuga + 1 bolsa/semana", "variable": true },
+      { "name": "Zanahoria", "quantity": "6–7 unid./semana", "variable": true },
+      { "name": "Remolacha", "quantity": "3–4 unid./semana", "variable": true },
+      { "name": "Papas", "quantity": "4–5 unid./semana", "variable": true },
+      { "name": "Cebolla morada", "quantity": "2 unid./semana", "variable": true },
+      { "name": "Palta", "quantity": "4–6 unid./semana", "variable": true },
+      { "name": "Champiñones (Sem A, risotto)", "quantity": "200 g × 2", "variable": true },
+      { "name": "Chaucha fresca (finde)", "quantity": "200 g × 2", "variable": true },
+      { "name": "Espinaca fresca", "quantity": "1 atado × 2", "variable": true },
+      { "name": "Limón", "quantity": "4 unidades", "variable": true },
+      { "name": "Ajo", "quantity": "2 cabezas", "variable": true }
+    ],
+    "🥚 Lácteos y huevos": [
+      { "name": "Huevos", "quantity": "3 docenas / mes" },
+      { "name": "Leche descremada", "quantity": "4 litros / mes" },
+      { "name": "Yogurt descremado", "quantity": "8 potes / mes" },
+      { "name": "Queso port salut light", "quantity": "400 g / mes" },
+      { "name": "Queso untable descremado", "quantity": "2 potes 200 g" },
+      { "name": "Queso rallado", "quantity": "200 g / mes" }
+    ],
+    "🌾 Almacén seco": [
+      { "name": "Arroz integral", "quantity": "1 kg / mes" },
+      { "name": "Fideos cinta / spaguetti", "quantity": "1 kg / mes" },
+      { "name": "Ravioles (finde)", "quantity": "2 paquetes" },
+      { "name": "Fideos tirabuzones (ensalada multicolor)", "quantity": "500 g" },
+      { "name": "Pan lactal integral", "quantity": "2 paquetes / mes" },
+      { "name": "Galletas de arroz", "quantity": "3 paquetes / mes" },
+      { "name": "Avena instantánea", "quantity": "500 g" },
+      { "name": "Granola sin azúcar", "quantity": "250 g" },
+      { "name": "Cereales fibra", "quantity": "1 caja" },
+      { "name": "Crutones", "quantity": "2 bolsas" }
+    ],
+    "🧴 Condimentos y extras": [
+      { "name": "Aceite de oliva", "quantity": "1 frasco / mes" },
+      { "name": "Mayonesa light", "quantity": "1 frasco" },
+      { "name": "Mostaza", "quantity": "1 frasco" },
+      { "name": "Miel", "quantity": "1 frasco pequeño" },
+      { "name": "Crema de maní sin azúcar", "quantity": "1 frasco" },
+      { "name": "Mermelada sin azúcar", "quantity": "1 frasco" },
+      { "name": "Caldo de verdura / pollo", "quantity": "1 caja cubitos" },
+      { "name": "Albahaca (fresca o seca)", "quantity": "c/n" },
+      { "name": "Orégano, ajo en polvo, comino, pimentón", "quantity": "revisar stock" },
+      { "name": "Rocío vegetal", "quantity": "1 aerosol" },
+      { "name": "Espinaca congelada (respaldo)", "quantity": "1 bolsa" }
+    ]
+  }
+}

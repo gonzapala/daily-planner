@@ -1,0 +1,30 @@
+{
+  "daily": [
+    { "label": "💧 Tomé 2L de agua", "desc": "8 vasos a lo largo del día" },
+    { "label": "🚶 15 min de movimiento", "desc": "Caminata, escaleras, lo que sea" },
+    { "label": "🥗 Verdura en almuerzo y cena", "desc": "Al menos ½ plato c/comida" },
+    { "label": "🚫 Sin harinas refinadas", "desc": "Pan blanco, facturas, galletitas" },
+    { "label": "🌙 Cena antes de las 22 hs", "desc": "Evitá comer muy tarde" },
+    { "label": "📖 Leer 3 páginas", "desc": "Antes de dormir o en el descanso" },
+    { "label": "🧴 Skincare", "desc": "Rutina mañana y/o noche" },
+    { "label": "🚿 Bañarse", "desc": "Higiene diaria" },
+    { "label": "🛌 Acostarse a las 23 hs", "desc": "Descanso y recuperación" }
+  ],
+  "install": [
+    { "icon": "🛒", "title": "Comprá el sábado o domingo", "type": "green", "body": "Con el planner hecho llegás al super con la lista exacta. Sin lista no hay plan. Sin compras no hay comida. Siempre el mismo día para que sea automático.", "tag": "Hábito de entorno" },
+    { "icon": "🍳", "title": "Sunday Prep: 75 minutos", "type": "green", "body": "Arrollado + pastel de arroz + hamburguesas + verduras lavadas. Hecho el domingo, tenés almuerzo de lunes a viernes resuelto. El lunes no tenés que pensar nada.", "tag": "Hábito de preparación" },
+    { "icon": "🥗", "title": "½ plato de verdura siempre", "type": "green", "body": "En almuerzo y cena llenás la mitad del plato con ensalada o verdura cocida antes de poner proteína e hidrato. Reducís calorías sin pasarla mal.", "tag": "Hábito de porción" },
+    { "icon": "💧", "title": "Botella en el escritorio", "type": "blue", "body": "Poné la botella de 1L visible cuando arrancás a trabajar. Cuando la terminás, la llenás. Solo con esto llegás a los 2L sin darte cuenta.", "tag": "Hábito de visibilidad" },
+    { "icon": "🌙", "title": "Colación pre-cena preparada", "type": "amber", "body": "Cuando llegás con hambre, comés cualquier cosa. Solución: tener algo listo para las 19–20 hs (galleta + queso, fruta + frutos secos) antes de que el hambre mande.", "tag": "Hábito de anticipación" }
+  ],
+  "break": [
+    { "icon": "⚠️", "title": "\"No hay nada en casa\"", "type": "rose", "body": "Patrón más repetido en tu registro. Solución: heladera siempre con huevos, queso, alguna verdura y una proteína. Con eso siempre armás algo.", "tag": "Trampa #1" },
+    { "icon": "⚠️", "title": "Dulces cuando hay ansiedad", "type": "rose", "body": "Alfajores, galletas, facturas — muy frecuente en tus semanas malas. Reemplazalo con: fruta + frutos secos, yogurt + granola, galleta arroz con queso o crema de maní.", "tag": "Trampa #2" },
+    { "icon": "⚠️", "title": "Saltarse el almuerzo", "type": "rose", "body": "Sin almuerzo planificado terminás comiendo cualquier cosa o demasiado por la noche. El batch cooking del domingo lo resuelve.", "tag": "Trampa #3" }
+  ],
+  "next": [
+    { "icon": "🏋️", "title": "Reintroducir cross 3x/semana", "type": "blue", "body": "Tu meta de Jan–Feb 2025. Cuando los hábitos de alimentación sean automáticos (2–3 semanas), sumá el entrenamiento. No todo al mismo tiempo.", "tag": "Escalón 2" },
+    { "icon": "📊", "title": "Registrar lo que comés (2 semanas)", "type": "amber", "body": "Como hacías en tu journal. Solo 14 días para identificar patrones. Te ayuda a ver dónde te salís del plan realmente.", "tag": "Escalón 2" },
+    { "icon": "🎯", "title": "Meta gradual: 500 g/semana", "type": "green", "body": "De 91 kg a ~85 kg son 6 kg. A 500 g/semana son 12 semanas. Sin dieta estricta, solo con el plan y movimiento progresivo.", "tag": "Escalón 2" }
+  ]
+}

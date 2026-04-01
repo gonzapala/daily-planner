@@ -1,0 +1,102 @@
+{
+  "weekA": {
+    "intro": "Proteína: pollo + atún. Lunes sin cocción (atún). Miércoles es el día fuerte: patamuslo al horno rinde miércoles noche. Milanesas el jueves rinden viernes. Fideos y merluza quedan para el finde.",
+    "note": "Cocinás 2 veces en la semana hábil: miércoles mediodía (patamuslo → rinde noche) · jueves noche (milanesas → rinden viernes). Lunes y martes son sin cocción o 10–15 min. Viernes siempre libre.",
+    "days": [
+      {
+        "name": "Lunes",
+        "cookNote": "Sin cocción",
+        "meals": {
+          "almuerzo": { "main": "Ensalada verano con atún", "side": "Atún + tomate, choclo, zanahoria, remolacha, palta, huevo hervido", "badge": "easy", "badgeText": "sin cocción · 10 min" },
+          "cena": { "main": "Bifes de cuadril a la plancha", "side": "+ ensalada mixta + arroz integral o lentejas", "badge": "easy", "badgeText": "rápido · 15 min" }
+        }
+      },
+      {
+        "name": "Martes",
+        "cookNote": "Rápido",
+        "meals": {
+          "almuerzo": { "main": "Ensalada multicolor", "side": "Pollo o atún + crutones + zanahoria + cebolla morada + arroz integral", "badge": "easy", "badgeText": "sin cocción · 10 min" },
+          "cena": { "main": "Ensalada tibia", "side": "Verduras salteadas + huevo + arroz integral + queso", "badge": "easy", "badgeText": "rápido · 15 min" }
+        }
+      },
+      {
+        "name": "Miércoles",
+        "cookNote": "Cocinás al mediodía → rinde noche",
+        "meals": {
+          "almuerzo": { "main": "Patamuslo al horno", "side": "con limón y orégano / mostaza y miel + papas al horno + ensalada", "badge": "cook", "badgeText": "cocinás hoy → rinde noche" },
+          "cena": { "main": "Pollo sobrante desmenuzado", "side": "+ ensalada de tomate, zanahoria y choclo o ensalada rusa", "badge": "reuse", "badgeText": "pollo del mediodía" }
+        }
+      },
+      {
+        "name": "Jueves",
+        "cookNote": "Cocinás a la noche → rinde viernes almuerzo",
+        "meals": {
+          "almuerzo": { "main": "Salteado tipo risotto de pollo", "side": "con champiñones, vegetales, choclo y arroz integral", "badge": "easy", "badgeText": "rápido · 20 min" },
+          "cena": { "main": "Milanesa de pollo", "side": "napolitana / común + ensalada mixta — hacés de más", "badge": "cook", "badgeText": "cocinás hoy → rinde viernes" }
+        }
+      },
+      {
+        "name": "Viernes",
+        "cookNote": "Sobrante + libre",
+        "meals": {
+          "almuerzo": { "main": "Milanesa sobrante", "side": "+ arroz integral + ensalada tomate y rúcula", "badge": "reuse", "badgeText": "milanesa del jueves" },
+          "cena": { "main": "Delivery o express", "side": "burger, wrap pollo, wok fideos, lomito — o atún con ensalada", "badge": "free", "badgeText": "libre" }
+        }
+      }
+    ],
+    "weekend": {
+      "sabado": { "almuerzo": "Churrasco / ojo de bife + ensalada papa, huevo, tomate y remolacha", "cena": "Libre" },
+      "domingo": { "almuerzo": "Patamuslo o ensalada verano completa", "cena": "Fideos cinta / spaguetti con salsa de tomate y albahaca" }
+    }
+  },
+  "weekB": {
+    "intro": "Proteína: carne vacuna + pollo. Lunes la carne rinde 3 comidas. Miércoles chop suey + cena de ensalada. Merluza queda para el sábado. Más cenas de ensalada para variar.",
+    "note": "Cocinás 2 veces en la semana hábil: lunes noche (carne → rinde martes almuerzo + cena tacos) · jueves noche (hambur. → rinden viernes). Miércoles el chop suey es rápido y rinde el jueves. Merluza queda para el sábado.",
+    "days": [
+      {
+        "name": "Lunes",
+        "cookNote": "Cocinás a la noche → rinde martes almuerzo y cena",
+        "meals": {
+          "almuerzo": { "main": "Ensalada verano con atún", "side": "Atún + tomate, choclo, zanahoria, remolacha, palta, huevo hervido", "badge": "easy", "badgeText": "sin cocción · 10 min" },
+          "cena": { "main": "Arroz con carne salteada", "side": "Cuadril en cubos / carne picada + verduras + arroz integral — hacés el triple", "badge": "cook", "badgeText": "cocinás hoy → rinde 2 comidas más" }
+        }
+      },
+      {
+        "name": "Martes",
+        "cookNote": "Sobrante del lunes · rinde almuerzo y cena",
+        "meals": {
+          "almuerzo": { "main": "Arroz con carne sobrante", "side": "+ ensalada mixta o verduras hervidas", "badge": "reuse", "badgeText": "arroz y carne del lunes" },
+          "cena": { "main": "Tacos con la misma carne", "side": "Carne sobrante recalentada + verdura salteada + queso untable en rapidita integral", "badge": "reuse", "badgeText": "carne del lunes" }
+        }
+      },
+      {
+        "name": "Miércoles",
+        "cookNote": "Chop suey al mediodía → rinde jueves almuerzo",
+        "meals": {
+          "almuerzo": { "main": "Chop suey de pollo", "side": "con verduras salteadas y arroz integral — hacés de más", "badge": "cook", "badgeText": "cocinás hoy → rinde jueves" },
+          "cena": { "main": "Ensalada de tomate, zanahoria, choclo y arroz integral", "side": "+ huevo hervido + garbanzos o lentejas", "badge": "easy", "badgeText": "sin cocción · 10 min" }
+        }
+      },
+      {
+        "name": "Jueves",
+        "cookNote": "Cocinás a la noche → rinde viernes almuerzo",
+        "meals": {
+          "almuerzo": { "main": "Chop suey sobrante", "side": "+ ensalada de tomate o rúcula", "badge": "reuse", "badgeText": "chop suey del miércoles" },
+          "cena": { "main": "Hamburguesa de pollo con queso", "side": "+ ensalada mixta + zanahoria rallada — hacés doble", "badge": "cook", "badgeText": "cocinás hoy → rinde viernes" }
+        }
+      },
+      {
+        "name": "Viernes",
+        "cookNote": "Sobrante + ensalada",
+        "meals": {
+          "almuerzo": { "main": "Hamburguesas sobrantes", "side": "+ ensalada papa, huevo, tomate y remolacha", "badge": "reuse", "badgeText": "hambur. del jueves" },
+          "cena": { "main": "Ensalada multicolor", "side": "Pollo o atún + crutones + cebolla morada + fideos tirabuzones o arroz", "badge": "easy", "badgeText": "sin cocción · 10 min" }
+        }
+      }
+    ],
+    "weekend": {
+      "sabado": { "almuerzo": "Merluza hervida / a la plancha + puré de papas + verduras hervidas", "cena": "Libre" },
+      "domingo": { "almuerzo": "Churrasco / bife de chorizo + ensalada hervida zanahoria, papa y huevo", "cena": "Ravioles con salsa de carne" }
+    }
+  }
+}

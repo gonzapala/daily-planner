@@ -1,0 +1,65 @@
+{
+  "meals": ["desayuno", "almuerzo", "colacion", "merienda", "cena"],
+  "labels": {
+    "desayuno": "Desayuno",
+    "almuerzo": "Almuerzo",
+    "colacion": "Colación",
+    "merienda": "Merienda",
+    "cena": "Cena"
+  },
+  "colors": {
+    "desayuno": "text-amber",
+    "almuerzo": "text-avocado",
+    "colacion": "text-teal",
+    "merienda": "text-[#b890f8]",
+    "cena": "text-rose"
+  },
+  "options": {
+    "desayuno": [
+      { "text": "☕ Café + tostada integral queso y miel + fruta", "noFlour": true },
+      { "text": "☕ Café + tortilla de avena con crema de maní y banana", "noFlour": true },
+      { "text": "🥛 Yogurt desc. + cereales + granola + fruta + frutos secos", "noFlour": true },
+      { "text": "🥑 Café + galleta arroz con palta, huevo y semillas", "noFlour": true },
+      { "text": "🧋 Licuado frutas + galleta arroz con queso", "noFlour": true },
+      { "text": "☕ Matecocido con leche + tostada integral + fruta", "noFlour": false }
+    ],
+    "almuerzo": [
+      { "text": "🍗 Milanesa de pollo al horno + ensalada mixta + arroz integral", "noFlour": true },
+      { "text": "🍗 Arrollado de pollo con acelga + ensalada zanahoria y remolacha", "noFlour": true },
+      { "text": "🍚 Pastel de arroz relleno de pollo gratinado + ensalada", "noFlour": true },
+      { "text": "🥗 Ensalada verano: pollo + tomate, choclo, remolacha, zanahoria, palta, huevo", "noFlour": true },
+      { "text": "🍔 Hamburguesas de lentejas + ensalada lechuga y tomate", "noFlour": true },
+      { "text": "🍛 Risotto de pollo y vegetales con arroz integral", "noFlour": true },
+      { "text": "🐟 Atún + arroz integral + tomate + huevo", "noFlour": true },
+      { "text": "🥣 Guiso de lentejas con verduras y pollo", "noFlour": true },
+      { "text": "🥧 Tarta integral de pollo y verdura + ensalada", "noFlour": false },
+      { "text": "🍖 Pan de carne con arroz primavera + ensalada", "noFlour": true }
+    ],
+    "colacion": [
+      { "text": "🍎 1 fruta (manzana / durazno / ciruela)", "noFlour": true },
+      { "text": "🥜 Puñado frutos secos (nueces + almendras)", "noFlour": true },
+      { "text": "🫙 Galleta de arroz con queso cremoso", "noFlour": true },
+      { "text": "🍇 Uvas + barrita de cereales Íntegra", "noFlour": true },
+      { "text": "🥛 ½ vaso yogurt descremado", "noFlour": true },
+      { "text": "🥚 1 huevo hervido", "noFlour": true }
+    ],
+    "merienda": [
+      { "text": "🍵 Té + galleta arroz con queso, semillas y fruta", "noFlour": true },
+      { "text": "🥣 Té rojo + tortilla de avena con crema de maní + fruta", "noFlour": true },
+      { "text": "🧋 Licuado banana y frutilla + galleta arroz con queso", "noFlour": true },
+      { "text": "🍦 Yogurt desc. + granola + frutos secos + banana", "noFlour": true },
+      { "text": "🥑 Galleta arroz con palta y huevo revuelto", "noFlour": true },
+      { "text": "☕ Café + fruta + frutos secos", "noFlour": true }
+    ],
+    "cena": [
+      { "text": "🍗 Bife de pollo + ensalada mixta + 1 huevo", "noFlour": true },
+      { "text": "🥚 Omelette de 2 huevos con queso y tomate", "noFlour": true },
+      { "text": "🍗 Bife de pollo + arroz integral + tomate + zanahoria", "noFlour": true },
+      { "text": "🐟 Atún + arroz integral + tomate + verduras", "noFlour": true },
+      { "text": "🍔 Hamburguesas de lentejas + ensalada lechuga y tomate", "noFlour": true },
+      { "text": "🧆 Albóndigas de pollo y espinaca + ensalada", "noFlour": true },
+      { "text": "🥗 Ensalada verano con atún o pollo desmenuzado", "noFlour": true },
+      { "text": "🌮 Wrap integral pollo + verduras salteadas", "noFlour": false }
+    ]
+  }
+}

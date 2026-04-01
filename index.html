@@ -30,6 +30,7 @@
 <!-- ═══════════ TABS ═══════════ -->
 <div class="flex gap-0 px-4 sm:px-6 border-b border-border overflow-x-auto">
   <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap active-tab" data-tab="planner"   onclick="showTab('planner')">📅 Planner</button>
+  <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="planab" onclick="showTab('planab')">📋 Plan semanal</button>
   <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="compras"  onclick="showTab('compras')">🛒 Compras</button>
   <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="batch"    onclick="showTab('batch')">🍳 Batch</button>
   <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="habitos"  onclick="showTab('habitos')">🧠 Hábitos</button>
@@ -37,6 +38,7 @@
   <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="objetivos" onclick="showTab('objetivos')">🎯 Objetivos</button>
   <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="chat"      onclick="showTab('chat')">💬 Chat IA</button>
   <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="registro" onclick="showTab('registro')">🍽️ Registro comidas</button>
+  <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="config" onclick="showTab('config')">⚙️ Configuración</button>
 </div>
 
 <div class="px-4 sm:px-6 py-5 max-w-[1400px] mx-auto">
@@ -57,7 +59,13 @@
     </div>
   </div>
 
+  <!-- Today's meal plan -->
+  <div id="todayPlanCard" class="mt-2"></div>
+
 </div>
+
+<!-- ═══════════ PLAN SEMANAL A/B ═══════════ -->
+<div id="pane-planab" class="pane hidden"></div>
 
 <!-- ═══════════ COMPRAS ═══════════ -->
 <div id="pane-compras" class="pane hidden">
@@ -218,29 +226,6 @@
 <!-- ═══════════ CHAT IA ═══════════ -->
 <div id="pane-chat" class="pane hidden flex flex-col" style="height: calc(100dvh - 120px);">
 
-  <!-- API Key setup (shown if no key stored) -->
-  <div id="chatSetup" class="hidden mb-4 bg-s1 border border-[#4a6830] rounded-2xl p-4">
-    <div class="font-mono text-sm text-avocado mb-1">🔑 Configuración</div>
-    <div class="flex flex-col gap-3">
-      <div>
-        <div class="text-sm text-muted mb-1.5">API Key de Anthropic *
-          <a href="https://console.anthropic.com" target="_blank" class="text-avocado underline ml-1">obtener gratis →</a>
-        </div>
-        <input id="apiKeyInput" type="password" placeholder="sk-ant-..."
-          class="w-full bg-s2 border border-border rounded-xl px-4 py-3 text-base text-ink font-sans focus:outline-none focus:border-bord2">
-      </div>
-      <div>
-        <div class="text-sm text-muted mb-1.5">API Key de YouTube
-          <span class="text-muted2 text-xs">(opcional, para buscar videos de recetas)</span>
-          <a href="https://console.cloud.google.com" target="_blank" class="text-avocado underline ml-1">obtener →</a>
-        </div>
-        <input id="ytKeyInput" type="password" placeholder="AIza..."
-          class="w-full bg-s2 border border-border rounded-xl px-4 py-3 text-base text-ink font-sans focus:outline-none focus:border-bord2">
-      </div>
-      <button onclick="saveApiKey()" class="font-bold text-base py-3 rounded-xl bg-avocado text-white hover:bg-[#8ab85c]">Guardar</button>
-    </div>
-  </div>
-
   <!-- Messages -->
   <div id="chatMessages" class="flex-1 overflow-y-auto flex flex-col gap-4 pb-4 pr-1"></div>
 
@@ -274,10 +259,6 @@
     </button>
   </div>
 
-  <!-- Change key link -->
-  <div class="text-center mt-2">
-    <button onclick="showKeySetup()" class="text-xs text-muted2 hover:text-muted">cambiar API key</button>
-  </div>
 
 </div>
 
@@ -293,6 +274,36 @@
 
   <!-- Day grid -->
   <div id="dayGrid" class="flex gap-3 overflow-x-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;"></div>
+
+</div>
+
+<!-- ═══════════ CONFIGURACIÓN ═══════════ -->
+<div id="pane-config" class="pane hidden">
+
+  <div class="font-mono text-xl text-avocado mb-5">Configuración</div>
+
+  <div class="bg-s1 border border-[#4a6830] rounded-2xl p-4 sm:p-5 max-w-lg">
+    <div class="font-mono text-sm text-teal mb-4">🔑 API Keys</div>
+    <div class="flex flex-col gap-4">
+      <div>
+        <div class="text-sm text-muted mb-1.5">API Key de Anthropic *
+          <a href="https://console.anthropic.com" target="_blank" class="text-avocado underline ml-1">obtener gratis →</a>
+        </div>
+        <input id="apiKeyInput" type="password" placeholder="sk-ant-..."
+          class="w-full bg-s2 border border-border rounded-xl px-4 py-3 text-base text-ink font-sans focus:outline-none focus:border-bord2">
+      </div>
+      <div>
+        <div class="text-sm text-muted mb-1.5">API Key de YouTube
+          <span class="text-muted2 text-xs">(opcional, para buscar videos de recetas)</span>
+          <a href="https://console.cloud.google.com" target="_blank" class="text-avocado underline ml-1">obtener →</a>
+        </div>
+        <input id="ytKeyInput" type="password" placeholder="AIza..."
+          class="w-full bg-s2 border border-border rounded-xl px-4 py-3 text-base text-ink font-sans focus:outline-none focus:border-bord2">
+      </div>
+      <button onclick="saveApiKey()" class="font-bold text-base py-3 rounded-xl bg-avocado text-white hover:bg-[#8ab85c]">Guardar</button>
+      <div id="configStatus"></div>
+    </div>
+  </div>
 
 </div>
 
@@ -359,6 +370,7 @@
   </div>
 </div>
 
+<script src="components/plan-ab.js"></script>
 <script>
 // ════════════════ API CONFIG ════════════════
 const API_URL = 'https://daily-planner-api-38fa.up.railway.app';
@@ -398,217 +410,52 @@ async function syncHabitsFromAPI() {
   if (!document.getElementById('pane-racha').classList.contains('hidden')) renderRacha();
 }
 
-// ════════════════ DATA ════════════════
+// ════════════════ DATA (loaded from JSON files) ════════════════
+let DAYS, MEALS, ML, MEAL_COLOR, BATCH_PAIRS, OPTS, TEMPLATE;
+let EXACT_QTY, STORE_GUIDE, SHOPPING, BATCH_SUNDAY, REUSE;
+let HABITS_INSTALL, HABITS_BREAK, HABITS_NEXT, HABIT_DAILY;
 
-const DAYS  = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-const MEALS = ['desayuno','almuerzo','colacion','merienda','cena'];
-const ML    = {desayuno:'Desayuno', almuerzo:'Almuerzo', colacion:'Colación', merienda:'Merienda', cena:'Cena'};
+async function loadData() {
+  const [mealOpts, weekTpl, shopping, batch, habitsData] = await Promise.all([
+    fetch('data/meal-options.json').then(r => r.json()),
+    fetch('data/weekly-template.json').then(r => r.json()),
+    fetch('data/shopping.json').then(r => r.json()),
+    fetch('data/batch-cooking.json').then(r => r.json()),
+    fetch('data/habits.json').then(r => r.json()),
+  ]);
 
-const MEAL_COLOR = {
-  desayuno: 'text-amber',
-  almuerzo: 'text-avocado',
-  colacion: 'text-teal',
-  merienda: 'text-[#b890f8]',
-  cena:     'text-rose',
-};
+  // Meal options
+  DAYS = weekTpl.days;
+  MEALS = mealOpts.meals;
+  ML = mealOpts.labels;
+  MEAL_COLOR = mealOpts.colors;
+  OPTS = {};
+  for (const [meal, options] of Object.entries(mealOpts.options)) {
+    OPTS[meal] = options.map(o => ({ t: o.text, nf: o.noFlour }));
+  }
 
-const BATCH_PAIRS = {
-  '0_almuerzo':'pollo','1_almuerzo':'pollo','1_cena':'pollo',
-  '2_almuerzo':'arroz','3_almuerzo':'hamblen','4_almuerzo':'hamblen',
-};
+  // Weekly template
+  BATCH_PAIRS = weekTpl.batchPairs;
+  TEMPLATE = weekTpl.template;
 
-const OPTS = {
-  desayuno: [
-    {t:'☕ Café + tostada integral queso y miel + fruta', nf:true},
-    {t:'☕ Café + tortilla de avena con crema de maní y banana', nf:true},
-    {t:'🥛 Yogurt desc. + cereales + granola + fruta + frutos secos', nf:true},
-    {t:'🥑 Café + galleta arroz con palta, huevo y semillas', nf:true},
-    {t:'🧋 Licuado frutas + galleta arroz con queso', nf:true},
-    {t:'☕ Matecocido con leche + tostada integral + fruta', nf:false},
-  ],
-  almuerzo: [
-    {t:'🍗 Milanesa de pollo al horno + ensalada mixta + arroz integral', nf:true},
-    {t:'🍗 Arrollado de pollo con acelga + ensalada zanahoria y remolacha', nf:true},
-    {t:'🍚 Pastel de arroz relleno de pollo gratinado + ensalada', nf:true},
-    {t:'🥗 Ensalada verano: pollo + tomate, choclo, remolacha, zanahoria, palta, huevo', nf:true},
-    {t:'🍔 Hamburguesas de lentejas + ensalada lechuga y tomate', nf:true},
-    {t:'🍛 Risotto de pollo y vegetales con arroz integral', nf:true},
-    {t:'🐟 Atún + arroz integral + tomate + huevo', nf:true},
-    {t:'🥣 Guiso de lentejas con verduras y pollo', nf:true},
-    {t:'🥧 Tarta integral de pollo y verdura + ensalada', nf:false},
-    {t:'🍖 Pan de carne con arroz primavera + ensalada', nf:true},
-  ],
-  colacion: [
-    {t:'🍎 1 fruta (manzana / durazno / ciruela)', nf:true},
-    {t:'🥜 Puñado frutos secos (nueces + almendras)', nf:true},
-    {t:'🫙 Galleta de arroz con queso cremoso', nf:true},
-    {t:'🍇 Uvas + barrita de cereales Íntegra', nf:true},
-    {t:'🥛 ½ vaso yogurt descremado', nf:true},
-    {t:'🥚 1 huevo hervido', nf:true},
-  ],
-  merienda: [
-    {t:'🍵 Té + galleta arroz con queso, semillas y fruta', nf:true},
-    {t:'🥣 Té rojo + tortilla de avena con crema de maní + fruta', nf:true},
-    {t:'🧋 Licuado banana y frutilla + galleta arroz con queso', nf:true},
-    {t:'🍦 Yogurt desc. + granola + frutos secos + banana', nf:true},
-    {t:'🥑 Galleta arroz con palta y huevo revuelto', nf:true},
-    {t:'☕ Café + fruta + frutos secos', nf:true},
-  ],
-  cena: [
-    {t:'🍗 Bife de pollo + ensalada mixta + 1 huevo', nf:true},
-    {t:'🥚 Omelette de 2 huevos con queso y tomate', nf:true},
-    {t:'🍗 Bife de pollo + arroz integral + tomate + zanahoria', nf:true},
-    {t:'🐟 Atún + arroz integral + tomate + verduras', nf:true},
-    {t:'🍔 Hamburguesas de lentejas + ensalada lechuga y tomate', nf:true},
-    {t:'🧆 Albóndigas de pollo y espinaca + ensalada', nf:true},
-    {t:'🥗 Ensalada verano con atún o pollo desmenuzado', nf:true},
-    {t:'🌮 Wrap integral pollo + verduras salteadas', nf:false},
-  ],
-};
+  // Shopping
+  EXACT_QTY = shopping.exactQuantities.map(q => ({ e: q.emoji, name: q.name, n: q.amount, unit: q.unit }));
+  STORE_GUIDE = shopping.storeGuide;
+  SHOPPING = {};
+  for (const [cat, items] of Object.entries(shopping.categories)) {
+    SHOPPING[cat] = items.map(i => ({ n: i.name, q: i.quantity, opt: i.optional || false }));
+  }
 
-const TEMPLATE = {
-  0:{ desayuno:'☕ Café + tostada integral con queso, miel y fruta + granola', almuerzo:'🍗 Arrollado de pollo con acelga + ensalada zanahoria y remolacha (preparado domingo)', colacion:'🍎 1 manzana', merienda:'🍵 Té + galleta arroz con queso y semillas', cena:'🍗 Bife de pollo + arroz integral + tomate + zanahoria' },
-  1:{ desayuno:'☕ Café + tortilla de avena con crema de maní, banana y granola', almuerzo:'🍗 Arrollado de pollo (sobrante) + ensalada lechuga, tomate y huevo', colacion:'🍎 1 durazno o ciruela', merienda:'🥣 Té rojo + tortilla de avena con crema de maní y frutos secos', cena:'🍗 Bife de pollo + ensalada mixta + 1 huevo' },
-  2:{ desayuno:'🥑 Café + galleta arroz con palta, huevo y semillas', almuerzo:'🍚 Pastel de arroz con pollo gratinado + ensalada (preparado domingo)', colacion:'🥜 Puñado de nueces y almendras', merienda:'🍦 Yogurt desc. + granola + frutos secos + banana', cena:'🥚 Omelette de 2 huevos con queso y tomate' },
-  3:{ desayuno:'🥛 Yogurt desc. + cereales + granola + fruta + frutos secos', almuerzo:'🍔 Hamburguesas de lentejas + ensalada lechuga, tomate y zanahoria (preparado domingo)', colacion:'🍇 Uvas + barrita de cereales', merienda:'🧋 Licuado banana y frutilla + galleta arroz con queso', cena:'🐟 Atún + arroz integral + tomate + verduras' },
-  4:{ desayuno:'☕ Café + tostada integral con queso, miel y fruta', almuerzo:'🍔 Hamburguesas de lentejas (sobrante) + ensalada rúcula y tomate', colacion:'🥛 ½ vaso yogurt descremado + frutos secos', merienda:'🥑 Galleta arroz con palta y huevo revuelto', cena:'🍗 Bife de pollo + ensalada mixta + 1 huevo' },
-  5:{ desayuno:'🧋 Licuado de frutas + galleta arroz con queso y semillas', almuerzo:'🍛 Risotto de pollo y vegetales con arroz integral', colacion:'🍎 Fruta a elección', merienda:'☕ Café o té + fruta + frutos secos', cena:'🆓 Comida libre (con moderación)' },
-  6:{ desayuno:'☕ Café + tostada integral con queso, miel y fruta', almuerzo:'🥩 Patamuslo pollo al horno + ensalada tomate, garbanzos y queso', colacion:'🍎 1 fruta', merienda:'🍦 Yogurt desc. + granola + fruta', cena:'🥗 Ensalada verano: atún / pollo + tomate, choclo, zanahoria, palta, huevo' },
-};
+  // Batch cooking
+  BATCH_SUNDAY = batch.sundayPrep;
+  REUSE = batch.reuse;
 
-const EXACT_QTY = [
-  {e:'🥚', name:'Huevos',            n:'9–11',  unit:'unidades'},
-  {e:'🍗', name:'Bifes de pollo',     n:'5–6',   unit:'unidades ~120 g'},
-  {e:'🍗', name:'Pechuga (arrollado)',n:'1',     unit:'pechuga grande'},
-  {e:'🐟', name:'Atún (latas)',       n:'3',     unit:'latas 170 g'},
-  {e:'🍅', name:'Tomates',            n:'7–8',   unit:'medianos'},
-  {e:'🥬', name:'Lechuga + rúcula',   n:'1+1',   unit:'unid. + bolsa'},
-  {e:'🥕', name:'Zanahorias',         n:'6–7',   unit:'unidades'},
-  {e:'🥑', name:'Paltas',             n:'3–4',   unit:'unidades'},
-  {e:'🍌', name:'Bananas',            n:'5–6',   unit:'unidades'},
-  {e:'🍎', name:'Manzanas verdes',    n:'5–6',   unit:'unidades'},
-  {e:'🍋', name:'Limones',            n:'3',     unit:'unidades'},
-  {e:'🧅', name:'Cebollas',           n:'3',     unit:'unidades'},
-];
-
-const STORE_GUIDE = [
-  {icon:'🥩', place:'Carnicería',    items:'Pechuga entera, bifes de pollo, patamuslos, carne picada'},
-  {icon:'🥬', place:'Verdulería',    items:'Tomates, lechuga, rúcula, zanahoria, remolacha, palta, acelga, frutas'},
-  {icon:'🛒', place:'Supermercado', items:'Huevos, lácteos, arroz integral, lentejas, avena, galletas arroz, atún'},
-];
-
-const SHOPPING = {
-  '🥩 Carnes y Proteínas': [
-    {n:'Pechuga de pollo entera (arrollado)', q:'1 pechuga ~400 g'},
-    {n:'Bifes de pechuga / suprema de pollo', q:'600 g (~6 bifes)'},
-    {n:'Patamuslos de pollo (domingo)',        q:'2–3 unidades'},
-    {n:'Carne picada especial (opcional)',     q:'300–400 g', opt:true},
-    {n:'Atún al natural (latas)',              q:'3 × 170 g'},
-    {n:'Huevos',                               q:'12 unidades'},
-    {n:'Jamón natural fetas (colación opt.)', q:'100 g', opt:true},
-  ],
-  '🥬 Verdulería': [
-    {n:'Tomates / cherry',                     q:'7–8 unid. o 500 g cherry'},
-    {n:'Lechuga mantecosa',                    q:'1 unidad grande'},
-    {n:'Rúcula',                               q:'1 bolsa 100 g'},
-    {n:'Zanahoria',                            q:'6–7 unidades'},
-    {n:'Remolacha',                            q:'3–4 unidades'},
-    {n:'Acelga (para arrollado)',              q:'1 atado'},
-    {n:'Palta',                                q:'3–4 unidades'},
-    {n:'Choclo (ensalada verano)',             q:'1 lata o 2 mazorcas'},
-    {n:'Cebolla morada',                       q:'2 unidades'},
-    {n:'Pimiento rojo / verde',               q:'2 unidades'},
-    {n:'Champiñones (risotto)',               q:'200 g'},
-    {n:'Ajo',                                  q:'1 cabeza'},
-    {n:'Limón',                                q:'3 unidades'},
-    {n:'Manzana verde',                        q:'5–6 unidades'},
-    {n:'Banana',                               q:'6 unidades'},
-    {n:'Fruta de estación (durazno, uvas…)', q:'~500 g'},
-  ],
-  '🥛 Lácteos': [
-    {n:'Leche descremada',                     q:'1 litro'},
-    {n:'Yogurt descremado (potes)',           q:'6–7 potes'},
-    {n:'Queso port salut light',              q:'200 g'},
-    {n:'Queso untable descremado',            q:'1 pote 200 g'},
-    {n:'Queso rallado',                        q:'100 g'},
-  ],
-  '🌾 Almacén': [
-    {n:'Arroz integral',                       q:'500 g'},
-    {n:'Lentejas (latas)',                     q:'2 latas'},
-    {n:'Garbanzos (lata)',                     q:'1 lata'},
-    {n:'Avena instantánea',                   q:'500 g'},
-    {n:'Galletas de arroz',                   q:'2 paquetes'},
-    {n:'Pan lactal integral (Bimbo/Fargo)',   q:'1 paquete'},
-    {n:'Granola sin azúcar',                  q:'250 g'},
-    {n:'Cereales fibra (All-Bran / Fitness)', q:'1 caja'},
-    {n:'Crema de maní sin azúcar',            q:'1 frasco'},
-    {n:'Mermelada sin azúcar (Beepure)',      q:'1 frasco'},
-  ],
-  '🧴 Condimentos': [
-    {n:'Aceite de oliva',                      q:'c/n semana'},
-    {n:'Mostaza',                              q:'c/n'},
-    {n:'Miel',                                 q:'c/n'},
-    {n:'Semillas (chía + sésamo + girasol)',  q:'1 mix 200 g'},
-    {n:'Frutos secos (nueces + almendras)',   q:'200 g'},
-    {n:'Caldo de verdura/pollo en cubitos',   q:'1 caja'},
-    {n:'Rocío vegetal',                        q:'1 aerosol'},
-    {n:'Sal, pimienta, ajo polvo, orégano',   q:'revisar stock'},
-  ],
-};
-
-const BATCH_SUNDAY = [
-  { title:'🍗 Arrollado de pollo con acelga', days:'Lun almuerzo + Mar almuerzo', time:'40 min',
-    steps:['Abrí la pechuga en libro, untá con mostaza y ajo','Rellenala con acelga blanqueada + huevo duro + queso rallado','Enrollá y atá con hilo o envolvé en aluminio','Horno 180°C × 35 min, dejá enfriar y cortá en rodajas','Guardá en heladera en contenedor cerrado'] },
-  { title:'🍚 Pastel de arroz con pollo', days:'Mié almuerzo', time:'30 min',
-    steps:['Cocinar 1 taza de arroz integral (extra para guarnición)','Rehogar cebolla + zanahoria + pollo picado con especias','Armar: capa arroz / pollo / arroz en fuente','Gratinar con queso rallado 15 min a 200°C','Dura 3–4 días en heladera'] },
-  { title:'🍔 Hamburguesas de lentejas', days:'Jue almuerzo + Vie almuerzo', time:'20 min',
-    steps:['Escurrí 2 latas de lentejas y pisalas con tenedor','Mezclá con 2–3 zanahorias ralladas, 2 huevos, 3 cdas avena, ajo, sal','Formá 6–8 hamburguesas','Cocinás 4 ahora, las otras 4 van al freezer','Vuelta y vuelta en sartén ~4 min c/lado'] },
-  { title:'🥕 Verduras y bases lavadas', days:'Toda la semana', time:'15 min',
-    steps:['Rallá 4 zanahorias → tupper en heladera','Lavá y secá rúcula y lechuga → bolsa con papel','Herví 3 huevos duros → heladera listos','Dejá paltas verdes a temperatura ambiente','Arroz integral extra: dura 4–5 días en tupper cerrado'] },
-];
-
-const REUSE = [
-  {prep:'Arrollado de pollo', color:'border-[#4a6830]',
-   uses:['Lunes almuerzo: rodajas con ensalada de zanahoria y remolacha','Martes almuerzo: rodajas frías con lechuga, tomate y huevo duro']},
-  {prep:'Pastel de arroz', color:'border-[#3a4a5a]',
-   uses:['Miércoles almuerzo: porción caliente con ensalada','El arroz extra sirve de guarnición lunes y jueves']},
-  {prep:'Hamburguesas de lentejas', color:'border-[#5a4a28]',
-   uses:['Jueves almuerzo: 2 hamburguesas + ensalada grande','Viernes almuerzo: 2 hamburguesas del freezer','Cena express cualquier día si llegás tarde']},
-  {prep:'Arroz integral cocido', color:'border-[#2a4a4a]',
-   uses:['Lunes cena: guarnición con bife de pollo','Jueves cena: con atún y tomate','Dura 5 días en heladera en tupper cerrado']},
-];
-
-const HABITS_INSTALL = [
-  {icon:'🛒', title:'Comprá el sábado o domingo', type:'green', body:'Con el planner hecho llegás al super con la lista exacta. Sin lista no hay plan. Sin compras no hay comida. Siempre el mismo día para que sea automático.', tag:'Hábito de entorno'},
-  {icon:'🍳', title:'Sunday Prep: 75 minutos', type:'green', body:'Arrollado + pastel de arroz + hamburguesas + verduras lavadas. Hecho el domingo, tenés almuerzo de lunes a viernes resuelto. El lunes no tenés que pensar nada.', tag:'Hábito de preparación'},
-  {icon:'🥗', title:'½ plato de verdura siempre', type:'green', body:'En almuerzo y cena llenás la mitad del plato con ensalada o verdura cocida antes de poner proteína e hidrato. Reducís calorías sin pasarla mal.', tag:'Hábito de porción'},
-  {icon:'💧', title:'Botella en el escritorio', type:'blue', body:'Poné la botella de 1L visible cuando arrancás a trabajar. Cuando la terminás, la llenás. Solo con esto llegás a los 2L sin darte cuenta.', tag:'Hábito de visibilidad'},
-  {icon:'🌙', title:'Colación pre-cena preparada', type:'amber', body:'Cuando llegás con hambre, comés cualquier cosa. Solución: tener algo listo para las 19–20 hs (galleta + queso, fruta + frutos secos) antes de que el hambre mande.', tag:'Hábito de anticipación'},
-];
-
-const HABITS_BREAK = [
-  {icon:'⚠️', title:'"No hay nada en casa"', type:'rose', body:'Patrón más repetido en tu registro. Solución: heladera siempre con huevos, queso, alguna verdura y una proteína. Con eso siempre armás algo.', tag:'Trampa #1'},
-  {icon:'⚠️', title:'Dulces cuando hay ansiedad', type:'rose', body:'Alfajores, galletas, facturas — muy frecuente en tus semanas malas. Reemplazalo con: fruta + frutos secos, yogurt + granola, galleta arroz con queso o crema de maní.', tag:'Trampa #2'},
-  {icon:'⚠️', title:'Saltarse el almuerzo', type:'rose', body:'Sin almuerzo planificado terminás comiendo cualquier cosa o demasiado por la noche. El batch cooking del domingo lo resuelve.', tag:'Trampa #3'},
-];
-
-const HABITS_NEXT = [
-  {icon:'🏋️', title:'Reintroducir cross 3x/semana', type:'blue', body:'Tu meta de Jan–Feb 2025. Cuando los hábitos de alimentación sean automáticos (2–3 semanas), sumá el entrenamiento. No todo al mismo tiempo.', tag:'Escalón 2'},
-  {icon:'📊', title:'Registrar lo que comés (2 semanas)', type:'amber', body:'Como hacías en tu journal. Solo 14 días para identificar patrones. Te ayuda a ver dónde te salís del plan realmente.', tag:'Escalón 2'},
-  {icon:'🎯', title:'Meta gradual: 500 g/semana', type:'green', body:'De 91 kg a ~85 kg son 6 kg. A 500 g/semana son 12 semanas. Sin dieta estricta, solo con el plan y movimiento progresivo.', tag:'Escalón 2'},
-];
-
-const HABIT_DAILY = [
-  {label:'💧 Tomé 2L de agua',            desc:'8 vasos a lo largo del día'},
-  {label:'🚶 15 min de movimiento',       desc:'Caminata, escaleras, lo que sea'},
-  {label:'🥗 Verdura en almuerzo y cena', desc:'Al menos ½ plato c/comida'},
-  {label:'🚫 Sin harinas refinadas',      desc:'Pan blanco, facturas, galletitas'},
-  {label:'🌙 Cena antes de las 22 hs',   desc:'Evitá comer muy tarde'},
-  {label:'📖 Leer 3 páginas',             desc:'Antes de dormir o en el descanso'},
-  {label:'🧴 Skincare',                   desc:'Rutina mañana y/o noche'},
-  {label:'🚿 Bañarse',                    desc:'Higiene diaria'},
-  {label:'🛌 Acostarse a las 23 hs',      desc:'Descanso y recuperación'},
-];
+  // Habits
+  HABIT_DAILY = habitsData.daily;
+  HABITS_INSTALL = habitsData.install;
+  HABITS_BREAK = habitsData.break;
+  HABITS_NEXT = habitsData.next;
+}
 
 // ════════════════ STATE ════════════════
 let plan={}, shopDone={}, habits={};
@@ -999,6 +846,11 @@ function showTab(name){
   if (name === 'racha') renderRacha();
   if (name === 'objetivos') renderObjetivos();
   if (name === 'chat') initChat();
+  if (name === 'planab') initPlanAB();
+  if (name === 'config') {
+    document.getElementById('apiKeyInput').value = getChatApiKey();
+    document.getElementById('ytKeyInput').value  = getYtApiKey();
+  }
 }
 
 function renderShopping(){
@@ -1316,14 +1168,43 @@ function clearAll(){
 }
 
 // ════════════════ INIT ════════════════
-load();
-loadObjectives();
-seedDefaultObjectives();
-renderPlanner();
-renderShopping();
-renderBatch();
-renderHabitsPage();
-syncHabitsFromAPI();
+loadData().then(() => {
+  load();
+  loadObjectives();
+  seedDefaultObjectives();
+  renderPlanner();
+  renderShopping();
+  renderBatch();
+  renderHabitsPage();
+  syncHabitsFromAPI();
+  renderTodayPlan();
+}).catch(err => console.error('Failed to load data:', err));
+
+async function renderTodayPlan() {
+  const card = document.getElementById('todayPlanCard');
+  if (!card) return;
+  const today = await getTodayPlan();
+  if (!today) return;
+  const badgeColors = { reuse: 'bg-[#173404] text-[#c0dd97]', cook: 'bg-[#412402] text-[#fac775]', easy: 'bg-[#042c53] text-[#85b7eb]', free: 'bg-[#26215c] text-[#afa9ec]' };
+  card.innerHTML = `
+    <div class="bg-s1 border border-[#4a6830] rounded-2xl p-4 sm:p-5">
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-3">
+        <div class="font-mono text-sm text-avocado">${today.dayName} · Semana ${today.weekType}</div>
+        <span class="text-xs px-2 py-0.5 rounded-full border border-[#4a6830] text-avocado">${today.cookNote}</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        ${Object.entries(today.meals).map(([meal, m]) => `
+          <div class="bg-s2 rounded-xl p-3">
+            <div class="text-[10px] font-semibold uppercase tracking-wider text-muted mb-1">${meal === 'almuerzo' ? 'Almuerzo' : 'Cena'}</div>
+            <div class="text-sm font-semibold text-ink">${m.main}</div>
+            ${m.side ? `<div class="text-xs text-muted mt-1">${m.side}</div>` : ''}
+            <span class="inline-block text-[10px] font-medium px-2 py-0.5 rounded-full mt-2 ${badgeColors[m.badge] || ''}">${m.badge === 'reuse' ? '🔄 ' : ''}${m.badgeText}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
 
 // ════════════════ CHAT IA ════════════════
 
@@ -1381,17 +1262,9 @@ function saveApiKey() {
   if (!ak.startsWith('sk-ant-')) { alert('La API key debe empezar con "sk-ant-"'); return; }
   localStorage.setItem('gp_api_key', ak);
   if (yk) localStorage.setItem('gp_yt_key', yk);
-  document.getElementById('chatSetup').classList.add('hidden');
-  appendSystemMsg('✅ ¡Configuración guardada! ' + (yk ? 'Puedo buscar videos de recetas en YouTube 🎬' : 'Si querés videos de recetas, agregá tu API key de YouTube.'));
-}
-
-function showKeySetup() {
-  const s = document.getElementById('chatSetup');
-  s.classList.toggle('hidden');
-  if (!s.classList.contains('hidden')) {
-    document.getElementById('apiKeyInput').value = getChatApiKey();
-    document.getElementById('ytKeyInput').value  = getYtApiKey();
-  }
+  const status = document.getElementById('configStatus');
+  status.innerHTML = '<div class="text-sm text-avocado font-semibold">✅ Guardado correctamente</div>';
+  setTimeout(() => status.innerHTML = '', 3000);
 }
 
 // ── Meal-time dynamic button ──
@@ -1566,7 +1439,7 @@ async function sendChat() {
   if (!text || chatLoading) return;
 
   const apiKey = getChatApiKey();
-  if (!apiKey) { document.getElementById('chatSetup').classList.remove('hidden'); return; }
+  if (!apiKey) { showTab('config'); return; }
 
   document.getElementById('chatSuggestions').classList.add('hidden');
 
@@ -1654,7 +1527,7 @@ function autoResize(el) {
 function initChat() {
   setMealTimeBtn();
   const hasKey = !!getChatApiKey();
-  document.getElementById('chatSetup').classList.toggle('hidden', hasKey);
+  if (!hasKey) { document.getElementById('apiKeyInput').value = ''; document.getElementById('ytKeyInput').value = ''; }
   if (chatHistory.length === 0) {
     appendSystemMsg('¡Hola Gonzalo! 👋 Soy tu asistente de salud y alimentación. Tengo el contexto de tu plan, tus hábitos y tus objetivos cargados. Preguntame lo que quieras — recetas, calorías, ejercicio — o tocá el botón de arriba para que te sugiera qué comer ahora según lo que tenés en casa 🥑');
   }
