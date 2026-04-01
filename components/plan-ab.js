@@ -3,57 +3,57 @@
 
 const STYLES = `
 .pab-subtabs { display: flex; gap: 0; margin-bottom: 1rem; border-bottom: 1px solid var(--border, #2c2c36); overflow-x: auto; }
-.pab-subtab { padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; color: #72728a; white-space: nowrap; transition: all 0.12s; background: none; border-top: none; border-left: none; border-right: none; }
+.pab-subtab { padding: 8px 16px; font-size: 0.875rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; color: #72728a; white-space: nowrap; transition: all 0.12s; background: none; border-top: none; border-left: none; border-right: none; }
 .pab-subtab.active { color: #7a9e50; border-bottom-color: #7a9e50; }
 .pab-pane { display: none; }
 .pab-pane.active { display: block; }
-.pab-intro { font-size: 13px; color: #a0a0b0; line-height: 1.6; padding: 10px 14px; background: #1a1a1f; border-radius: 8px; margin-bottom: 1.25rem; border-left: 3px solid #7a9e50; }
+.pab-intro { font-size: 0.875rem; color: #a0a0b0; line-height: 1.6; padding: 10px 14px; background: #1a1a1f; border-radius: 8px; margin-bottom: 1.25rem; border-left: 3px solid #7a9e50; }
 .pab-day-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.25rem; }
 .pab-day-card { background: #131316; border: 1px solid #2c2c36; border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
 .pab-day-card.pab-today { border: 2px solid #7a9e50; }
 .pab-day-card.pab-today .pab-day-header { background: #1a2a14; }
-.pab-today-label { font-size: 10px; font-weight: 700; color: #7a9e50; background: #173404; padding: 1px 8px; border-radius: 10px; margin-left: 8px; }
+.pab-today-label { font-size: 0.75rem; font-weight: 700; color: #7a9e50; background: #173404; padding: 1px 8px; border-radius: 10px; margin-left: 8px; }
 .pab-day-header { background: #1a1a1f; padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; }
-.pab-day-name { font-weight: 600; font-size: 13px; color: #e2e2ea; }
-.pab-day-cook { font-size: 11px; color: #7a9e50; }
+.pab-day-name { font-weight: 600; font-size: 1rem; color: #e2e2ea; }
+.pab-day-cook { font-size: 0.875rem; color: #7a9e50; }
 .pab-day-meals { padding: 8px 14px 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 520px) { .pab-day-meals { grid-template-columns: 1fr; } }
-.pab-meal-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #72728a; margin-bottom: 3px; }
-.pab-meal-main { font-size: 13px; font-weight: 600; color: #e2e2ea; line-height: 1.35; }
-.pab-meal-side { font-size: 12px; color: #72728a; margin-top: 2px; line-height: 1.4; }
-.pab-badge { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; margin-top: 4px; font-weight: 500; }
+.pab-meal-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #72728a; margin-bottom: 3px; }
+.pab-meal-main { font-size: 0.875rem; font-weight: 600; color: #e2e2ea; line-height: 1.35; }
+.pab-meal-side { font-size: 0.75rem; color: #72728a; margin-top: 2px; line-height: 1.4; }
+.pab-badge { display: inline-block; font-size: 0.75rem; padding: 1px 7px; border-radius: 10px; margin-top: 4px; font-weight: 500; }
 .pab-badge-reuse { background: #173404; color: #c0dd97; }
 .pab-badge-cook { background: #412402; color: #fac775; }
 .pab-badge-easy { background: #042c53; color: #85b7eb; }
 .pab-badge-free { background: #26215c; color: #afa9ec; }
-.pab-section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #72728a; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #2c2c36; margin-top: 1.25rem; }
+.pab-section-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #72728a; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #2c2c36; margin-top: 1.25rem; }
 .pab-g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
 .pab-g3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin-bottom: 1rem; }
 @media (max-width: 520px) { .pab-g2 { grid-template-columns: 1fr; } .pab-g3 { grid-template-columns: 1fr 1fr; } }
 .pab-card { background: #131316; border: 1px solid #2c2c36; border-radius: 8px; padding: 10px 12px; }
-.pab-card-title { font-weight: 600; font-size: 13px; color: #e2e2ea; margin-bottom: 4px; }
-.pab-card-sub { font-size: 11px; color: #7a9e50; margin-bottom: 5px; }
-.pab-card-body { font-size: 12px; color: #a0a0b0; line-height: 1.55; }
-.pab-note { font-size: 12px; color: #a0a0b0; background: #1a1a1f; border-radius: 8px; padding: 10px 14px; line-height: 1.6; margin-bottom: 1rem; }
+.pab-card-title { font-weight: 600; font-size: 0.875rem; color: #e2e2ea; margin-bottom: 4px; }
+.pab-card-sub { font-size: 0.75rem; color: #7a9e50; margin-bottom: 5px; }
+.pab-card-body { font-size: 0.875rem; color: #a0a0b0; line-height: 1.55; }
+.pab-note { font-size: 0.875rem; color: #a0a0b0; background: #1a1a1f; border-radius: 8px; padding: 10px 14px; line-height: 1.6; margin-bottom: 1rem; }
 .pab-month-row { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 6px; margin-bottom: 1.25rem; }
-.pab-mc { text-align: center; padding: 10px 6px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+.pab-mc { text-align: center; padding: 10px 6px; border-radius: 8px; font-size: 0.875rem; font-weight: 600; }
 .pab-mc-a { background: #173404; color: #c0dd97; }
 .pab-mc-b { background: #042c53; color: #85b7eb; }
 .pab-mc-c { background: #412402; color: #fac775; }
 .pab-shop-intro { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 8px; }
-.pab-shop-intro p { font-size: 13px; color: #a0a0b0; line-height: 1.5; }
-.pab-clear-btn { font-size: 12px; color: #72728a; border: 1px solid #2c2c36; background: none; border-radius: 6px; padding: 4px 12px; cursor: pointer; }
+.pab-shop-intro p { font-size: 0.875rem; color: #a0a0b0; line-height: 1.5; }
+.pab-clear-btn { font-size: 0.75rem; color: #72728a; border: 1px solid #2c2c36; background: none; border-radius: 6px; padding: 4px 12px; cursor: pointer; }
 .pab-shop-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; margin-bottom: 1rem; }
 @media (max-width: 600px) { .pab-shop-grid { grid-template-columns: 1fr; } }
 .pab-shop-sec { background: #131316; border: 1px solid #2c2c36; border-radius: 10px; overflow: hidden; }
-.pab-shop-head { background: #1a1a1f; padding: 8px 14px; font-weight: 600; font-size: 13px; color: #e2e2ea; border-bottom: 1px solid #2c2c36; display: flex; justify-content: space-between; align-items: center; }
-.pab-shop-count { font-size: 11px; font-weight: 400; color: #72728a; }
+.pab-shop-head { background: #1a1a1f; padding: 8px 14px; font-weight: 600; font-size: 0.875rem; color: #e2e2ea; border-bottom: 1px solid #2c2c36; display: flex; justify-content: space-between; align-items: center; }
+.pab-shop-count { font-size: 0.75rem; font-weight: 400; color: #72728a; }
 .pab-shop-body { padding: 4px 14px 10px; }
 .pab-shop-item { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; border-bottom: 1px solid #1e1e24; cursor: pointer; gap: 8px; transition: opacity 0.12s; }
 .pab-shop-item:last-child { border-bottom: none; }
 .pab-shop-item.done { opacity: 0.35; text-decoration: line-through; }
-.pab-shop-n { font-size: 12.5px; color: #e2e2ea; flex: 1; }
-.pab-shop-q { font-size: 11px; font-weight: 600; color: #7a9e50; white-space: nowrap; }
+.pab-shop-n { font-size: 0.875rem; color: #e2e2ea; flex: 1; }
+.pab-shop-q { font-size: 0.75rem; font-weight: 600; color: #7a9e50; white-space: nowrap; }
 .pab-shop-q.var { color: #fac775; }
 `;
 
@@ -229,8 +229,8 @@ window.initPlanAB = async function() {
   // Render
   container.innerHTML = `
     <div style="margin-bottom: 12px;">
-      <span style="font-size: 12px; color: #72728a;">Semana actual:</span>
-      <span style="font-size: 13px; font-weight: 700; color: #7a9e50; margin-left: 4px;">Semana ${currentType}</span>
+      <span style="font-size: 0.75rem; color: #72728a;">Semana actual:</span>
+      <span style="font-size: 0.875rem; font-weight: 700; color: #7a9e50; margin-left: 4px;">Semana ${currentType}</span>
     </div>
     <div class="pab-subtabs">
       <button class="pab-subtab${isA ? ' active' : ''}" onclick="pabShowSub('A', this)">Semana A</button>

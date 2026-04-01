@@ -58,6 +58,7 @@
 
 ## Planner — mejoras futuras
 
+- [ ] Importar CSV para reemplazar planes semanales A/B — CSV generado por Claude AI con formato definido (semana, día, almuerzo, cena, badges). Parseo + validación + preview en pestaña Configuración. Plan custom se guarda en localStorage con opción de restaurar original. Ver plan detallado en `.claude/plans/humble-foraging-sutherland.md`
 - [ ] Agregar más recetas y postres saludables — Gonzalo tiene registros de comidas e ideas de postres para incorporar
 - [ ] Registrar peso semanal en Objetivos — campo de seguimiento de peso para ver progreso hacia los 85 kg
 
@@ -75,4 +76,4 @@
 
 ---
 
-_Última actualización: 26 Mar 2026_
+_Última actualización: 1 Abr 2026_
