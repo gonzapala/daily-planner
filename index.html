@@ -36,6 +36,7 @@
   <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="racha"    onclick="showTab('racha')">🔥 Racha</button>
   <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="objetivos" onclick="showTab('objetivos')">🎯 Objetivos</button>
   <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="chat"      onclick="showTab('chat')">💬 Chat IA</button>
+  <button class="tab-btn font-semibold text-sm sm:text-base px-4 sm:px-5 py-3 text-muted border-b-2 border-transparent whitespace-nowrap" data-tab="registro" onclick="showTab('registro')">🍽️ Registro comidas</button>
 </div>
 
 <div class="px-4 sm:px-6 py-5 max-w-[1400px] mx-auto">
@@ -48,17 +49,13 @@
     <!-- rendered by JS -->
   </div>
 
-  <!-- Week bar -->
+  <!-- Habits today counter -->
   <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
     <span id="weekLabel" class="font-mono text-sm text-muted"></span>
     <div class="flex gap-2 flex-wrap">
-      <span class="text-sm px-3 py-1 rounded-full border border-border bg-s2 text-muted">Comidas: <strong class="text-avocado" id="mealsDone">0</strong>/35</span>
       <span class="text-sm px-3 py-1 rounded-full border border-border bg-s2 text-muted">Hábitos hoy: <strong class="text-teal" id="habitsDone">0</strong>/9</span>
     </div>
   </div>
-
-  <!-- Day grid -->
-  <div id="dayGrid" class="flex gap-3 overflow-x-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;"></div>
 
 </div>
 
@@ -281,6 +278,21 @@
   <div class="text-center mt-2">
     <button onclick="showKeySetup()" class="text-xs text-muted2 hover:text-muted">cambiar API key</button>
   </div>
+
+</div>
+
+<!-- ═══════════ REGISTRO COMIDAS ═══════════ -->
+<div id="pane-registro" class="pane hidden">
+
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-4">
+    <div class="font-mono text-xl text-avocado">Registro de Comidas</div>
+    <div class="flex gap-2 flex-wrap">
+      <span class="text-sm px-3 py-1 rounded-full border border-border bg-s2 text-muted">Comidas: <strong class="text-avocado" id="mealsDone">0</strong>/35</span>
+    </div>
+  </div>
+
+  <!-- Day grid -->
+  <div id="dayGrid" class="flex gap-3 overflow-x-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;"></div>
 
 </div>
 
