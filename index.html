@@ -348,6 +348,44 @@
 </div>
 
 <script>
+// ════════════════ API CONFIG ════════════════
+const API_URL = 'https://daily-planner-api-38fa.up.railway.app';
+
+async function apiGet(path) {
+  if (!API_URL) return null;
+  try {
+    const res = await fetch(API_URL + path);
+    return await res.json();
+  } catch(e) { console.warn('API error:', e); return null; }
+}
+
+async function apiPost(path, body) {
+  if (!API_URL) return null;
+  try {
+    const res = await fetch(API_URL + path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    return await res.json();
+  } catch(e) { console.warn('API error:', e); return null; }
+}
+
+async function syncHabitsFromAPI() {
+  const today = todayStr();
+  const data = await apiGet('/api/habits?date=' + today);
+  if (!data || !data.length) return;
+  data.forEach(h => {
+    const legacyKey = 'today_' + new Date().toDateString() + '_' + h.habitIndex;
+    const newKey = 'h_' + today + '_' + h.habitIndex;
+    habits[legacyKey] = h.completed;
+    habits[newKey] = h.completed;
+  });
+  save();
+  renderPlanner();
+  if (!document.getElementById('pane-racha').classList.contains('hidden')) renderRacha();
+}
+
 // ════════════════ DATA ════════════════
 
 const DAYS  = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -926,8 +964,14 @@ function toggleHabit(i) {
   habits[newKey]    = !current;
   save();
   renderPlanner();
-  // refresh racha tab if visible
   if (!document.getElementById('pane-racha').classList.contains('hidden')) renderRacha();
+  // sync to API
+  apiPost('/api/habits', {
+    date: todayStr(),
+    habitIndex: i,
+    label: HABIT_DAILY[i].label,
+    completed: !current
+  });
 }
 
 // ════════════════ TABS (override to handle racha) ════════════════
@@ -1267,6 +1311,7 @@ renderPlanner();
 renderShopping();
 renderBatch();
 renderHabitsPage();
+syncHabitsFromAPI();
 
 // ════════════════ CHAT IA ════════════════
 
